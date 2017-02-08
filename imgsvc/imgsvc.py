@@ -35,5 +35,11 @@ def read_mat():
     
     return (resp.text, resp.status_code, resp.headers.items())
 
+@app.route('/img', methods=['GET'])
+def greeting():
+    return 'greeting'
+
+
+
 if __name__ == '__main__':
-    app.run(host='10.0.2.15', port=8080, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)
