@@ -58,8 +58,8 @@ def parse_img(img, line_num):
             rects.extend(my_buffer[-line_num:])
             del my_buffer[:]
 
-    mat = to_symbol_list(rects, img, line_num)
-    return mat
+    mat, icons = to_symbol_list(rects, img, line_num)
+    return mat, icons
 '''
     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
     cv2.imshow('image',img)
@@ -71,7 +71,7 @@ def to_symbol_list(rects, img, line_num):
     color_symbol = {}
     symbol_value = 0
     symbol_list = []
-    
+    icons = {}
     for p in rects:
         img_snipet = img[p.y:p.y+p.h, p.x:p.x+p.w]
         avg_color = avg_value(img_snipet)
@@ -86,11 +86,12 @@ def to_symbol_list(rects, img, line_num):
         if not found:
             symbol_value += 1
             color_symbol[avg_color] = symbol_value
+            icons[symbol_value] = p
             symbol_list.append(symbol_value)
 
         cv2.rectangle(img, (p.x, p.y), (p.x + p.w, p.y + p.h), (0, 200, 0), 2)
     
-    return np.reshape(symbol_list, (-1, line_num)).tolist()
+    return np.reshape(symbol_list, (-1, line_num)).tolist(), icons
 
 def color_var(a, b):
     a = np.array(a)

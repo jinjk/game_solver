@@ -21,15 +21,22 @@ CORS(app)
 
 SOLVER_URL = 'http://solversvc:8080/solver'
 
+class PosEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ip.Pos):
+            return obj.__dict__
+
+        return json.JSONEncoder.default(self, obj) 
+
 @app.route('/img', methods=['POST'])
 def read_mat():
     file = request.files['file']
     data = file.read()
     file.close()
-    mat = ip.parse_from_data(data)
-    mat_obj = {'mat': mat}
-    mat_str = json.dumps(mat_obj)
-    print(mat_str)
+    mat, icons = ip.parse_from_data(data)
+
+    mat_obj = {'mat': mat, 'icons' : icons}
+    mat_str = json.dumps(mat_obj, cls = PosEncoder)
     headers = {'Content-Type':'application/json'} 
     resp = rq.post(SOLVER_URL, headers = headers, data = mat_str)
     
