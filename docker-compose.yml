@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  imgsvc:
+    image: imgsvc:0.2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./imgsvc:/root/imgsvc
+    command: python /root/imgsvc/imgsvc.py
+  solversvc:
+    image: soversvc
+
