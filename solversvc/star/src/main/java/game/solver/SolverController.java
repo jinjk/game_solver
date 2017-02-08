@@ -17,10 +17,15 @@ public class SolverController {
 
 	@Autowired
 	private Solver solver;
-	
+
 	@RequestMapping(path = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Wall> solveStarMat(@RequestBody InputMat mat) {
 		return solver.execute(mat.mat);
+	}
+	
+	@RequestMapping(path = "/greeting")
+	public String greeting() {
+		return "greeting";
 	}
 }
 
