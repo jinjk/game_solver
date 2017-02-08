@@ -19,7 +19,7 @@ http_client.HTTPConnection.debuglevel = 1
 app = Flask(__name__)
 CORS(app)
 
-SOLVER_URL = 'http://10.0.2.2:8080/solver'
+SOLVER_URL = 'http://solversvc:8080/solver'
 
 @app.route('/img', methods=['POST'])
 def read_mat():

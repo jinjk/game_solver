@@ -8,6 +8,13 @@ services:
     volumes:
       - ./imgsvc:/root/imgsvc
     command: python /root/imgsvc/imgsvc.py
+    depends_on:
+      - solversvc
   solversvc:
-    image: soversvc
+    image: solversvc:0.1
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./solversvc/apps:/root/apps
+    command: java -jar /root/apps/star.jar
 
