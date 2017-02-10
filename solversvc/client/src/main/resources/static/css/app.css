@@ -1,0 +1,9 @@
+.ui-block img {
+    width  : 100%;
+    height : auto;
+}
+
+.ui-block canvas {
+    width  : 100%;
+    height : auto;
+}
