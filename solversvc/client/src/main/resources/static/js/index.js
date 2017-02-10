@@ -1,32 +1,92 @@
 var service_address = "http://localhost:1580/img";
+var col_number = 10;
+var row_number = 10;
 
 String.prototype.format = function() {
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
-        formatted = formatted.replace(regexp, arguments[i]);
-    }
-    return formatted;
+	var formatted = this;
+	for (var i = 0; i < arguments.length; i++) {
+		var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+		formatted = formatted.replace(regexp, arguments[i]);
+	}
+	return formatted;
 };
 
 $(function() {
 
 	var imageData = "";
 
-	function add_canvas(img, i) {
-		var canvas = $("<canvas id='chart{0}'/>".format(i)); // document.createElement("canvas");
-		var block = $("<div class='ui-block'><div class='ui-bar ui-bar-a'></div></div>");
+	function draw_canvases(img, data) {
+		var s_width = data.icons["1"].w;
+		var grid = init_canvas_grid(img.naturalWidth, s_width);
 
-		block.children("div").html(canvas);
-		$("#listview").append(block);
-		
-		canvas.attr('width', img.width);
-		canvas.attr('height', img.height);
+		data.walls
+				.forEach(function(step, i) {
+					var canvas = $("<canvas id='chart{0}'/>".format(i)); // document.createElement("canvas");
+					var block = $("<div class='ui-block'><div class='ui-bar'></div></div>");
 
-		var ctx = canvas.get(0).getContext("2d");
-		ctx.drawImage(img, 0, 0);
-		
+					block.children("div").html(canvas);
+					$("#listview").append(block);
 
+					canvas.attr('width', img.naturalWidth);
+					canvas.attr('height', img.naturalWidth);
+
+					var ctx = canvas.get(0).getContext("2d");
+
+					draw_step(step, grid, data.icons, img, ctx);
+				});
+
+	}
+
+	function init_canvas_grid(width, s_width) {
+		var grid = new Array();
+		margin = (width - s_width * col_number) / (col_number + 1);
+
+		for (var i = 0; i < row_number; i++) {
+			var col = new Array();
+			for (var j = 0; j < col_number; j++) {
+				var pos = new Object();
+				pos.x = j * s_width + (j+1) * margin;
+				pos.y = i * s_width + (i+1) * margin;
+				pos.w = s_width;
+				pos.h = s_width;
+				col[j] = pos;
+			}
+			grid[i] = col;
+		}
+
+		return grid;
+	}
+
+	function draw_step(step, grid, icons, img, ctx) {
+		for (var i = 0; i < step.columns.length; i++) {
+			var col = step.columns[i];
+			for (var j = 0; j < col.bricks.length; j++) {
+				var br = col.bricks[j];
+				draw_star(img, ctx, icons[br.ch], grid[br.y][br.x], br.marked);
+			}
+		}
+	}
+
+	function draw_star(img, ctx, src_pos, des_pos, marked) {
+
+
+		if (marked) {
+			ctx.beginPath();
+			ctx.lineWidth = "10";
+			ctx.strokeStyle = "black";
+			
+			ctx.rect(des_pos.x, des_pos.y, des_pos.w, des_pos.h);
+			ctx.stroke();
+		}
+		else {
+
+		}
+		ctx.drawImage(img, src_pos.x, src_pos.y, src_pos.w, src_pos.h,
+				des_pos.x, des_pos.y, des_pos.w, des_pos.h);
+		// ctx.drawImage(img, 0, 0, 100, 100,
+		// 0, 0, 100, 100);
+		// ctx.drawImage(img, 100, 100, 200, 200,
+		// 100, 100, 200, 200);
 	}
 
 	function read_image(file) {
@@ -35,13 +95,13 @@ $(function() {
 
 			reader.onload = function(e) {
 				$('#preview').attr('src', e.target.result);
-				
+
 				$('#preview').load(function() {
-					add_canvas($('#preview').get(0), 1);
+					draw_canvases($('#preview').get(0), test_data);
 				});
 			}
 			reader.readAsDataURL(file.files[0]);
-			
+
 			$(':mobile-pagecontainer').pagecontainer('change', '#pagetwo');
 		}
 	}
