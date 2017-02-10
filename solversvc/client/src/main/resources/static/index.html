@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<script src="js/index.js"></script>
+</head>
+
+<body>
+	<div data-role="page" id="pageone">
+		<div data-role="header">
+			<a href="#pageone" data-transition="slide" data-direction="reverse"
+				class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
+			<h1>消灭星星帮帮忙</h1>
+			<a href="#pagetwo" data-transition="slide"
+				class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<div class="ui-body ui-body-a ui-corner-all">
+				<p>为了能够正确的识别游戏截图，请确保:</p>
+				<p>1. 截图每行只有10个星星</p>
+				<p>2. 是游戏每关的开始，（您还没有动手消灭过任何一个星星）</p>
+				<form enctype="multipart/form-data">
+					<label for="file">上传游戏截图</label> <input type="file" name="file"
+						id="file" value="">
+					<button class="ui-shadow ui-btn ui-corner-all" id="upload">开始</button>
+				</form>
+			</div>
+		</div>
+
+		<div data-role="footer">
+			<p style="font-size: 0.6em">v0.1</p>
+		</div>
+	</div>
+
+	<div data-role="page" id="pagetwo">
+		<div data-role="header">
+			<a href="#pageone" data-transition="slide" data-direction="reverse"
+				class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
+			<h1>消灭星星帮帮忙</h1>
+			<a href="#pagetwo" data-transition="slide"
+				class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
+		</div>
+
+		<div data-role="main" class="ui-content" id="charts">
+			<div class="ui-body ui-body-a ui-corner-all">
+			</div>
+		</div>
+
+		<div data-role="footer">
+			<p style="font-size: 0.6em">v0.1</p>
+		</div>
+	</div>
+
+</body>
+
+</html>
