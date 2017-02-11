@@ -19,21 +19,27 @@ $(function() {
 		var s_width = data.icons["1"].w;
 		var grid = init_canvas_grid(img.naturalWidth, s_width);
 
-		data.walls
-				.forEach(function(step, i) {
-					var canvas = $("<canvas id='chart{0}'/>".format(i)); // document.createElement("canvas");
-					var block = $("<div class='ui-block'><div class='ui-bar'></div></div>");
+		var len = data.walls.length;
+		for (var i = 0; i < len; i++)
+		{
+			var index = i;
+			
+			var step = data.walls[index];
+			var canvas = $("<canvas id='chart{0}'/>".format(index)); // document.createElement("canvas");
+			var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
+			var block2 = $("<div class='ui-block'><div class='ui-bar ui-bar-a'></div></div>");
 
-					block.children("div").html(canvas);
-					$("#listview").append(block);
+			block1.children("div").html(canvas);
+			$("#listview").append(block1);
+			$("#listview").append(block2);
 
-					canvas.attr('width', img.naturalWidth);
-					canvas.attr('height', img.naturalWidth);
+			canvas.attr('width', img.naturalWidth);
+			canvas.attr('height', img.naturalWidth);
 
-					var ctx = canvas.get(0).getContext("2d");
+			var ctx = canvas.get(0).getContext("2d");
 
-					draw_step(step, grid, data.icons, img, ctx);
-				});
+			draw_step(step, grid, data.icons, img, ctx);
+		}
 
 	}
 
@@ -54,7 +60,7 @@ $(function() {
 			grid[i] = col;
 		}
 
-		return grid;
+		return {'grid': grid, 'margin': margin};
 	}
 
 	function draw_step(step, grid, icons, img, ctx) {
@@ -62,27 +68,33 @@ $(function() {
 			var col = step.columns[i];
 			for (var j = 0; j < col.bricks.length; j++) {
 				var br = col.bricks[j];
-				draw_star(img, ctx, icons[br.ch], grid[br.y][br.x], br.marked);
+				draw_star(img, ctx, icons[br.ch], grid.grid[br.y][br.x], br.marked, grid.margin);
 			}
 		}
 	}
 
-	function draw_star(img, ctx, src_pos, des_pos, marked) {
-
-
+	function draw_star(img, ctx, src_pos, des_pos, marked, margin) {
+		var rate = 0.7;
+		var x = des_pos.x;
+		var y = des_pos.y
+		var w = des_pos.w;
+		var h = des_pos.h;
+		
 		if (marked) {
 			ctx.beginPath();
-			ctx.lineWidth = "10";
-			ctx.strokeStyle = "black";
+			ctx.lineWidth = margin/2;
+			ctx.setLineDash([6, 12]);
+			ctx.strokeStyle = "white";
 			
 			ctx.rect(des_pos.x, des_pos.y, des_pos.w, des_pos.h);
 			ctx.stroke();
-		}
-		else {
 
 		}
-		ctx.drawImage(img, src_pos.x, src_pos.y, src_pos.w, src_pos.h,
-				des_pos.x, des_pos.y, des_pos.w, des_pos.h);
+		else {
+			ctx.drawImage(img, src_pos.x, src_pos.y, src_pos.w, src_pos.h,
+					x, y, w, h);
+		}
+		
 		// ctx.drawImage(img, 0, 0, 100, 100,
 		// 0, 0, 100, 100);
 		// ctx.drawImage(img, 100, 100, 200, 200,

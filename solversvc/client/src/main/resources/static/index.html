@@ -27,8 +27,10 @@
 				<p>1. 截图每行只有10个星星</p>
 				<p>2. 是游戏每关的开始，（您还没有动手消灭过任何一个星星）</p>
 				<form enctype="multipart/form-data">
-					<label for="file">上传游戏截图</label> <input type="file" name="file"
-						id="file" value="">
+					<span class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
+					    <span>添加文件</span>
+					    <input type="file" name="files[]" multiple data-role="none"/>
+					</span>
 					<button class="ui-shadow ui-btn ui-corner-all" id="upload">开始</button>
 				</form>
 			</div>
@@ -49,11 +51,7 @@
 		</div>
 
 		<div data-role="main" class="ui-content" id="charts">
-			<div class="ui-grid ui-body ui-body-a ui-corner-all" id="listview">
-				<div class="ui-block">
-					<div class='ui-bar'><img alt="" src="" id="preview" /></div>
-				</div>
-				<div class="ui-block"></div>
+			<div class="ui-grid" id="listview">
 			</div>
 		</div>
 
@@ -61,7 +59,7 @@
 			<p style="font-size: 0.6em">v0.1</p>
 		</div>
 	</div>
-
+<div hidden><img alt="" src="" id="preview" /></div>
 </body>
 
 </html>
