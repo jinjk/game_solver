@@ -14,13 +14,7 @@ String.prototype.format = function() {
 $(function() {
 
 	// ----------------- init code --------------
-	$(".center").slick({
-		dots : false,
-		infinite : false,
-		centerMode : true,
-		slidesToShow : 1,
-		slidesToScroll : 1
-	});
+	$(".slider").slick();
 	// ----------------- end init ---------------
 
 	var imageData = "";
@@ -37,13 +31,10 @@ $(function() {
 			var canvas = $("<canvas id='chart{0}'/>".format(index)); // document.createElement("canvas");
 			var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
 			block1.children('div').html(canvas);
-			// var block2 = $("<div class='ui-block'><div class='ui-bar
-			// ui-bar-a'></div></div>");
-			$(".center").append(block1);
-
-			// $("#listview").append(block2);
-			$('.center').slick('slickAdd', block1);
-
+			$(".slider").append(block1);
+			$('.slider').slick('slickAdd', block1);
+			
+			
 			canvas.attr('width', img.naturalWidth);
 			canvas.attr('height', img.naturalWidth);
 
