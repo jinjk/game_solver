@@ -13,6 +13,16 @@ String.prototype.format = function() {
 
 $(function() {
 
+	// ----------------- init code --------------
+	$(".center").slick({
+		dots : false,
+		infinite : false,
+		centerMode : true,
+		slidesToShow : 1,
+		slidesToScroll : 1
+	});
+	// ----------------- end init ---------------
+
 	var imageData = "";
 
 	function draw_canvases(img, data) {
@@ -20,18 +30,19 @@ $(function() {
 		var grid = init_canvas_grid(img.naturalWidth, s_width);
 
 		var len = data.walls.length;
-		for (var i = 0; i < len; i++)
-		{
+		for (var i = 0; i < len; i++) {
 			var index = i;
-			
+
 			var step = data.walls[index];
 			var canvas = $("<canvas id='chart{0}'/>".format(index)); // document.createElement("canvas");
 			var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
-			var block2 = $("<div class='ui-block'><div class='ui-bar ui-bar-a'></div></div>");
+			block1.children('div').html(canvas);
+			// var block2 = $("<div class='ui-block'><div class='ui-bar
+			// ui-bar-a'></div></div>");
+			$(".center").append(block1);
 
-			block1.children("div").html(canvas);
-			$("#listview").append(block1);
-			$("#listview").append(block2);
+			// $("#listview").append(block2);
+			$('.center').slick('slickAdd', block1);
 
 			canvas.attr('width', img.naturalWidth);
 			canvas.attr('height', img.naturalWidth);
@@ -40,7 +51,7 @@ $(function() {
 
 			draw_step(step, grid, data.icons, img, ctx);
 		}
-
+	
 	}
 
 	function init_canvas_grid(width, s_width) {
@@ -51,8 +62,8 @@ $(function() {
 			var col = new Array();
 			for (var j = 0; j < col_number; j++) {
 				var pos = new Object();
-				pos.x = j * s_width + (j+1) * margin;
-				pos.y = i * s_width + (i+1) * margin;
+				pos.x = j * s_width + (j + 1) * margin;
+				pos.y = i * s_width + (i + 1) * margin;
 				pos.w = s_width;
 				pos.h = s_width;
 				col[j] = pos;
@@ -60,7 +71,10 @@ $(function() {
 			grid[i] = col;
 		}
 
-		return {'grid': grid, 'margin': margin};
+		return {
+			'grid' : grid,
+			'margin' : margin
+		};
 	}
 
 	function draw_step(step, grid, icons, img, ctx) {
@@ -68,7 +82,8 @@ $(function() {
 			var col = step.columns[i];
 			for (var j = 0; j < col.bricks.length; j++) {
 				var br = col.bricks[j];
-				draw_star(img, ctx, icons[br.ch], grid.grid[br.y][br.x], br.marked, grid.margin);
+				draw_star(img, ctx, icons[br.ch], grid.grid[br.y][br.x],
+						br.marked, grid.margin);
 			}
 		}
 	}
@@ -79,22 +94,21 @@ $(function() {
 		var y = des_pos.y
 		var w = des_pos.w;
 		var h = des_pos.h;
-		
+
 		if (marked) {
 			ctx.beginPath();
-			ctx.lineWidth = margin/2;
-			ctx.setLineDash([6, 12]);
+			ctx.lineWidth = margin / 2;
+			ctx.setLineDash([ 6, 12 ]);
 			ctx.strokeStyle = "white";
-			
+
 			ctx.rect(des_pos.x, des_pos.y, des_pos.w, des_pos.h);
 			ctx.stroke();
 
+		} else {
+			ctx.drawImage(img, src_pos.x, src_pos.y, src_pos.w, src_pos.h, x,
+					y, w, h);
 		}
-		else {
-			ctx.drawImage(img, src_pos.x, src_pos.y, src_pos.w, src_pos.h,
-					x, y, w, h);
-		}
-		
+
 		// ctx.drawImage(img, 0, 0, 100, 100,
 		// 0, 0, 100, 100);
 		// ctx.drawImage(img, 100, 100, 200, 200,
