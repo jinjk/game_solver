@@ -33,11 +33,21 @@ def read_mat():
     file = request.files['file']
     data = file.read()
     file.close()
-    mat, icons = ip.parse_from_data(data)
+    headers = {'Content-Type':'application/json'} 
+    
+    try:
+        mat, icons = ip.parse_from_data(data)
+    except:
+        return ('{"code":4001}', 400, headers)
+
+    mat_len = sum(len(x) for x in mat)
+    
+    if mat_len != 100:
+        return ('{"code":4002}', 400, headers)
 
     mat_obj = {'mat': mat, 'icons' : icons}
     mat_str = json.dumps(mat_obj, cls = PosEncoder)
-    headers = {'Content-Type':'application/json'} 
+
     resp = rq.post(SOLVER_URL, headers = headers, data = mat_str)
     
     return (resp.text, resp.status_code, resp.headers.items())

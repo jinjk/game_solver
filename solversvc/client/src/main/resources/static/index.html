@@ -32,11 +32,17 @@
 				<form enctype="multipart/form-data">
 					<span
 						class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
-						<span>添加文件</span> <input type="file" name="files[]" multiple
+						<span>添加文件</span> <input type="file" name="file" multiple
 						data-role="none" />
 					</span>
 					<button class="ui-shadow ui-btn ui-corner-all" id="upload">开始</button>
 				</form>
+			</div>
+			<div data-role="popup" data-overlay-theme="b" id="message">
+				<a href="#" data-rel="back" data-role="button" data-theme="a"
+					data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<p></p>
+				<h1 id="msg_content"></h1>
 			</div>
 		</div>
 
@@ -55,7 +61,8 @@
 		</div>
 
 		<div data-role="main" class="ui-content " id="charts">
-			<div class="slider" data-slick='{"arrows": true, "infinite": false, "slidesToShow": 1, "slidesToScroll": 1}'></div>
+			<div class="slider"
+				data-slick='{"arrows": true, "infinite": false, "slidesToShow": 1, "slidesToScroll": 1}'></div>
 		</div>
 
 		<div data-role="footer">

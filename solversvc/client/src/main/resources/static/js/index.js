@@ -2,6 +2,14 @@ var service_address = "http://localhost:1580/img";
 var col_number = 10;
 var row_number = 10;
 
+var messages = {
+	"0" : "Cannot connect to server",
+	"3001" : "请选择图片上传",
+	"3002" : "The file size should be less that 1M",
+	"4001" : "Cannot understand you image",
+	"4002" : "Cannot find all the stars in you image, we need 100 (10 X 10)"
+}
+
 String.prototype.format = function() {
 	var formatted = this;
 	for (var i = 0; i < arguments.length; i++) {
@@ -33,8 +41,7 @@ $(function() {
 			block1.children('div').html(canvas);
 			$(".slider").append(block1);
 			$('.slider').slick('slickAdd', block1);
-			
-			
+
 			canvas.attr('width', img.naturalWidth);
 			canvas.attr('height', img.naturalWidth);
 
@@ -42,7 +49,7 @@ $(function() {
 
 			draw_step(step, grid, data.icons, img, ctx);
 		}
-	
+
 	}
 
 	function init_canvas_grid(width, s_width) {
@@ -106,7 +113,7 @@ $(function() {
 		// 100, 100, 200, 200);
 	}
 
-	function read_image(file) {
+	function show_steps(file, data) {
 		if (file.files && file.files[0]) {
 			var reader = new FileReader();
 
@@ -114,7 +121,7 @@ $(function() {
 				$('#preview').attr('src', e.target.result);
 
 				$('#preview').load(function() {
-					draw_canvases($('#preview').get(0), test_data);
+					draw_canvases($('#preview').get(0), data);
 				});
 			}
 			reader.readAsDataURL(file.files[0]);
@@ -123,61 +130,117 @@ $(function() {
 		}
 	}
 
-	$(':file').on('change', function(event) {
-		read_image(event.target);
-	});
+	function show_message(code) {
+		$("#msg_content").text(messages[code]);
+		$("#message").popup("open");
+	}
 
-	$('form').on('submit', function(event) {
-		event.stopPropagation(); // Stop stuff happening
-		event.preventDefault(); // Totally stop stuff happening
+	$('form')
+			.on(
+					'submit',
+					function(event) {
+						event.stopPropagation(); // Stop stuff happening
+						event.preventDefault(); // Totally stop stuff happening
+						file = $(":file");
+						file_ = file[0];
 
-		file_ = $(":file")[0];
-		if (!file_.name) {
-			alert("请选择图片上传")
-			return;
-		}
-
-		var data = new FormData();
-		data.append(file_.name, file_.files[0]);
-
-		$.mobile.loading("show");
-		$.ajax({
-			// Your server script to process the upload
-			url : service_address,
-			type : 'POST',
-			// Form data
-			data : data,
-
-			// Tell jQuery not to process data or worry about content-type
-			// You *must* include these options!
-			cache : false,
-			contentType : false,
-			processData : false,
-
-			// Custom XMLHttpRequest
-			xhr : function() {
-				var myXhr = $.ajaxSettings.xhr();
-				if (myXhr.upload) {
-					// For handling the progress of the upload
-					myXhr.upload.addEventListener('progress', function(e) {
-						if (e.lengthComputable) {
-							// $('progress').attr({
-							// value : e.loaded,
-							// max : e.total,
-							// });
+						if (!file_.name) {
+							show_message(3001);
+							return;
 						}
-					}, false);
-				}
-				return myXhr;
-			},
-		}).done(function(data) {
-			if (console && console.log) {
-				console.log("Returned value:", data);
-			}
-			$(':mobile-pagecontainer').pagecontainer('change', '#pagetwo');
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-		}).always(function() {
-			$.mobile.loading("hide");
-		});
-	});
+						// Check size is less than 2MB
+						if (file_.files[0].size > 2 * 1024 * 1024) {
+							show_message(3002);
+							return;
+						}
+
+						var data = new FormData();
+						data.append(file_.name, file_.files[0]);
+
+						$.mobile.loading("show", {
+							text : "Loading",
+							textVisible : true,
+							theme : "b",
+							textonly : false,
+							html : ""
+						});
+						$
+								.ajax(
+										{
+											// Your server script to process the
+											// upload
+											url : service_address,
+											type : 'POST',
+											// Form data
+											data : data,
+
+											// Tell jQuery not to process data
+											// or worry about content-type
+											// You *must* include these options!
+											cache : false,
+											contentType : false,
+											processData : false,
+
+											// Custom XMLHttpRequest
+											xhr : function() {
+												var myXhr = $.ajaxSettings
+														.xhr();
+												if (myXhr.upload) {
+													// For handling the progress
+													// of the upload
+													myXhr.upload
+															.addEventListener(
+																	'progress',
+																	function(e) {
+																		if (e.lengthComputable) {
+																			percentage = Math
+																					.round((e.loaded / e.total) * 100);
+																			$(
+																					".ui-loader")
+																					.children(
+																							"h1")
+																					.text(
+																							percentage
+																									+ "%");
+
+																			if (percentage == 100) {
+																				$(
+																						".ui-loader")
+																						.children(
+																								"h1")
+																						.text(
+																								"waiting caculation...");
+																			}
+																		}
+																	}, false);
+												}
+												return myXhr;
+											},
+										}).done(function(data) {
+									if (console && console.log) {
+										console.log("Returned value:", data);
+									}
+									show_steps(file_, data);
+								})
+								.fail(function(jqXHR, textStatus, errorThrown) {
+									statusCode = jqXHR.status;
+									json = jqXHR.responseText;
+									data = {};
+
+									if (json) {
+										try {
+											data = JSON.parse(json);
+											statusCode = data.code;
+										} catch (err) {
+											console.log(json);
+											console.log(err.message);
+										}
+
+									}
+
+									show_message(statusCode);
+								}).always(function() {
+									$.mobile.loading("hide");
+								});
+					});
 });
