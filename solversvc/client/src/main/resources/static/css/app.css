@@ -2,6 +2,15 @@ body p {
 	font-size: 0.8em;
 }
 
+.slick-prev:before, .slick-next:before {
+	color: red !important;
+}
+
+.slider {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
 .ui-block img {
 	width: 100%;
 	height: auto;
