@@ -19,7 +19,7 @@ import game.solver.model.Column;
 import game.solver.model.Wall;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest()
 public class SolverTest {
 	Logger logger = LoggerFactory.getLogger(SolverTest.class);
 	@Autowired
