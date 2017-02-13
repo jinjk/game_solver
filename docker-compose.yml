@@ -10,7 +10,14 @@ services:
     command: python /root/imgsvc/imgsvc.py
     depends_on:
       - solversvc
-  solversvc:
+ solversvc:
+    image: solversvc:0.1
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./solversvc/apps:/root/apps
+    command: java -jar /root/apps/star.jar
+ client:
     image: solversvc:0.1
     ports:
       - "8081:8080"
