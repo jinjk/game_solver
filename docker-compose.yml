@@ -11,17 +11,17 @@ services:
     depends_on:
       - solversvc
  solversvc:
-    image: solversvc:0.1
+    build: ./sol_docker
     ports:
       - "8081:8080"
     volumes:
       - ./solversvc/apps:/root/apps
     command: java -jar /root/apps/star.jar
  client:
-    image: solversvc:0.1
+    build: ./sol_docker
     ports:
-      - "8081:8080"
+      - "8080:80"
     volumes:
       - ./solversvc/apps:/root/apps
-    command: java -jar /root/apps/star.jar
+    command: java -jar /root/apps/client.jar
 
