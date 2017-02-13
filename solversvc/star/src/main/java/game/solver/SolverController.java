@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import game.solver.Solver.Wall;
+import game.solver.model.Wall;
 
 @RestController
 @RequestMapping("/solver")

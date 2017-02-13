@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import game.solver.model.Brick;
+import game.solver.model.Column;
+import game.solver.model.Wall;
+
 /**
  * Hello world!
  */
@@ -25,19 +29,23 @@ public class Solver {
 	public static final int PREDICTION_LENGTH = 2;
 
 	public List<Wall> execute(List<List<Integer>> mat) {
-		Solver app = new Solver();
+		Wall wall = readMat(mat);
+		return execute(wall);
+	}
+	
+
+	public List<Wall> execute(Wall wall) {
 		List<Wall> result = new ArrayList<Wall>();
 
-		Wall wall = app.readMat(mat);
 		NextStatus status = null;
 		do {
 			Wall old = wall;
-			status = app.wipeOut(wall, true);
+			status = wipeOut(wall, true);
 			if (status.group != null)
 				status.group.mark();
 
 			result.add(old);
-			app.printWall(old);
+			printWall(old);
 
 			wall = status.wall;
 		} while (status != null && status.group != null);
@@ -84,14 +92,15 @@ public class Solver {
 			}
 
 			for (Brick[] line : block) {
+				String debugLine = "";
 				for (Brick v : line) {
 					if (v.marked) {
-						logger.debug(v.ch + "<\t");
+						debugLine += (v.ch + "<\t");
 					} else {
-						logger.debug(v.ch + "\t");
+						debugLine += (v.ch + "\t");
 					}
 				}
-				logger.debug("\n");
+				logger.debug(debugLine);
 			}
 
 			logger.debug("--------------------------------------");
@@ -282,74 +291,9 @@ public class Solver {
 		int groupSize;
 	}
 
-	class Wall {
-		int width;
-		int height;
 
-		List<Column> columns = new ArrayList<>();
 
-		List<Brick> getBricks() {
-			List<Brick> bricks = new ArrayList<Brick>();
-			for (Column c : columns) {
-				bricks.addAll(c.bricks);
-			}
-			return bricks;
-		}
-
-		public Wall copy() {
-			Wall image = new Wall();
-			image.width = width;
-			image.height = height;
-
-			image.columns = new ArrayList<>();
-			for (Column c : columns) {
-				Column imageColumn = new Column();
-				image.columns.add(imageColumn);
-				for (Brick b : c.bricks) {
-					Brick imageBrick = b.copy();
-					imageColumn.bricks.add(imageBrick);
-				}
-
-			}
-			return image;
-		}
-
-		public int getWidth() {
-			return width;
-		}
-
-		public void setWidth(int width) {
-			this.width = width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		public void setHeight(int height) {
-			this.height = height;
-		}
-
-		public List<Column> getColumns() {
-			return columns;
-		}
-
-		public void setColumns(List<Column> columns) {
-			this.columns = columns;
-		}
-	}
-
-	class Column {
-		List<Brick> bricks = new ArrayList<>();
-
-		public List<Brick> getBricks() {
-			return bricks;
-		}
-
-		public void setBricks(List<Brick> bricks) {
-			this.bricks = bricks;
-		}
-	}
+	
 
 	class Group {
 		char ch;
@@ -392,71 +336,7 @@ public class Solver {
 		int end = Integer.MIN_VALUE;
 	}
 
-	class Brick {
 
-		char ch;
-		int x;
-		int y;
-		boolean marked = false;
 
-		Brick(char ch, int x, int y) {
-			this.ch = ch;
-			this.x = x;
-			this.y = y;
-		}
-
-		public int hashCode() {
-			return toString().hashCode();
-		}
-
-		public String toString() {
-			return ch + "," + x + "," + y;
-		}
-
-		public boolean equals(Object obj) {
-			if (obj != null && obj instanceof Brick) {
-				return this.toString().equals(((Brick) obj).toString());
-			}
-
-			return false;
-		}
-
-		public Brick copy() {
-			Brick b = new Brick(ch, x, y);
-			return b;
-		}
-
-		public char getCh() {
-			return ch;
-		}
-
-		public void setCh(char ch) {
-			this.ch = ch;
-		}
-
-		public int getX() {
-			return x;
-		}
-
-		public void setX(int x) {
-			this.x = x;
-		}
-
-		public int getY() {
-			return y;
-		}
-
-		public void setY(int y) {
-			this.y = y;
-		}
-
-		public boolean isMarked() {
-			return marked;
-		}
-
-		public void setMarked(boolean marked) {
-			this.marked = marked;
-		}
-	}
 
 }
