@@ -1,4 +1,4 @@
-var service_address = "http://localhost:1580/img";
+var service_address = "http://ddouu.cn:8080/img";
 var col_number = 10;
 var row_number = 10;
 
