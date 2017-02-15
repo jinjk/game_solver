@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import math
+import functools as ft
 
 
 class Pos(object):
@@ -27,44 +28,77 @@ def parse_from_data(data, line_num = CONST_LINE_NUM):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
     return parse_img(img, line_num)
 
+
 def parse_img(img, line_num):
     '''parse img data to get star matrix'''
     height, width, channels = img.shape
+
+    margin = width / 10 * 0.2
+    least_len = width / 10 * 0.3
+    max_len = width / 10
+
     imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    ret,thresh = cv2.threshold(imgray,30,255,0)
+    thresh = cv2.adaptiveThreshold(imgray,255,cv2.ADAPTIVE_THRESH_MEAN_C, \
+            cv2.THRESH_BINARY,31,2)
     img2, contours, hierarchy = cv2.findContours(
         thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+#    black = np.zeros([height,width,3],dtype=np.uint8)
     my_buffer = []
     rects = []
+    star_rects = []
     row_idx = 0
     last_y = -1
     last_w = -1
-    for cnt in reversed(contours):
+
+    for cnt in contours:
         x, y, w, h = cv2.boundingRect(cnt)
+        p = Pos(x, y, w, h)
+        rects.append(p)
+
+    rects = filter(lambda p: p.w > least_len and \
+            p.h > least_len and p.w < max_len and p.h < max_len, rects)
+
+    def compare(p1, p2):
+        if p1.x > p2.x and math.fabs(p1.y - p2.y) < margin:
+            return 1
+        else:
+            return -1
+
+    rects = sorted(rects, key=ft.cmp_to_key(compare))
+
+    for p in rects:
+        x, y, w, h = p.x, p.y, p.w, p.h
+        print(x, y, w, h)
+        cv2.rectangle(black, (x, y), (x + w, y + h), (0, 200, 0), 1)
         if last_y == -1:
             last_y = y
             last_w = w
-        elif math.fabs(last_y - y) < 3 and math.fabs(last_w - w) < 3:
+        elif math.fabs(last_y - y) < margin and \
+                math.fabs(last_w - w) < margin:
             row_idx += 1
-        if x < 5:
+
+        if x < margin:
             row_idx = 1
 
-        p = Pos(x, y, w, h)
+        print(row_idx)
+
         my_buffer.append(p)
         last_y = y
         last_w = w
-        if row_idx == line_num and width - (x + w) < 5:
-            rects.extend(my_buffer[-line_num:])
+        if row_idx == line_num and width - (x + w) < margin:
+            star_rects.extend(my_buffer[-line_num:])
             del my_buffer[:]
 
-    mat, icons = to_symbol_list(rects, img, line_num)
+    mat, icons = to_symbol_list(star_rects, img, line_num)
     return mat, icons
 '''
-    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-    cv2.imshow('image',img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    print(mat)
+    return mat
+    img = cv2.imread('messi5.jpg',0)
+    plt.imshow(black, cmap = 'gray', interpolation = 'bicubic')
+    plt.show()
+    return mat
 '''
 
 def to_symbol_list(rects, img, line_num):
@@ -88,8 +122,6 @@ def to_symbol_list(rects, img, line_num):
             color_symbol[avg_color] = symbol_value
             icons[symbol_value] = p
             symbol_list.append(symbol_value)
-
-        cv2.rectangle(img, (p.x, p.y), (p.x + p.w, p.y + p.h), (0, 200, 0), 2)
     
     return np.reshape(symbol_list, (-1, line_num)).tolist(), icons
 
