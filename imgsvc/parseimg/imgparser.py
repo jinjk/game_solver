@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+#from matplotlib import pyplot as plt
 import math
 import functools as ft
 
@@ -12,24 +13,48 @@ class Pos(object):
         self.w = w
         self.h = h
 
-CONST_LINE_NUM = 10
+CONST_COL_NUM = 10
 CONST_STAR_VAR = 100
 
 def main():
     """main function"""
-    fd = open('test.png', 'rb')
+    fd = open('test3.png', 'rb')
     data = fd.read()
     fd.close()
-    parse_from_data(data, CONST_LINE_NUM)
+    parse_from_data(data, CONST_COL_NUM)
 
-def parse_from_data(data, line_num = CONST_LINE_NUM):
+def parse_from_data(data, col_num = CONST_COL_NUM):
     ''' parse img from file data'''
     nparr = np.fromstring(data, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
-    return parse_img(img, line_num)
+    return parse_img(img, col_num)
+
+def filter_rects(width, margin, col_num, rects):
+    sw = width / col_num # star rect width
+
+    rects = list(filter(lambda p: 0.6 < p.w / sw < 1 and \
+               0.6 < p.h / sw < 1 and 0.85 < p.w / p.h < 1.2, rects))
+    edge_rects = filter(lambda p: p.x < margin, rects)
+    edge_rects = sorted(edge_rects, key=lambda p: p.x)
+
+    left_bottom_box = edge_rects[0]
+
+    y_begin = left_bottom_box.y - sw * 9.2
+    y_end = left_bottom_box.y + sw * 0.2
+
+    rects = filter(lambda p: y_begin < p.y < y_end, rects)
+
+    def compare(p1, p2):
+        if p1.x > p2.x and math.fabs(p1.y - p2.y) < margin:
+            return 1
+        else:
+            return -1
+
+    rects = sorted(rects, key=ft.cmp_to_key(compare))
+    return rects, y_begin
 
 
-def parse_img(img, line_num):
+def parse_img(img, col_num):
     '''parse img data to get star matrix'''
     height, width, channels = img.shape
 
@@ -56,41 +81,14 @@ def parse_img(img, line_num):
         p = Pos(x, y, w, h)
         rects.append(p)
 
-    rects = filter(lambda p: p.w > least_len and \
-            p.h > least_len and p.w < max_len and p.h < max_len, rects)
+    rects, y_begin = filter_rects(width, margin, col_num, rects)
 
-    def compare(p1, p2):
-        if p1.x > p2.x and math.fabs(p1.y - p2.y) < margin:
-            return 1
-        else:
-            return -1
-
-    rects = sorted(rects, key=ft.cmp_to_key(compare))
 
     for p in rects:
-        x, y, w, h = p.x, p.y, p.w, p.h
-        print(x, y, w, h)
+        x,y,w,h = p.x, p.y, p.w, p.h
         cv2.rectangle(black, (x, y), (x + w, y + h), (0, 200, 0), 1)
-        if last_y == -1:
-            last_y = y
-            last_w = w
-        elif math.fabs(last_y - y) < margin and \
-                math.fabs(last_w - w) < margin:
-            row_idx += 1
 
-        if x < margin:
-            row_idx = 1
-
-        print(row_idx)
-
-        my_buffer.append(p)
-        last_y = y
-        last_w = w
-        if row_idx == line_num and width - (x + w) < margin:
-            star_rects.extend(my_buffer[-line_num:])
-            del my_buffer[:]
-
-    mat, icons = to_symbol_list(star_rects, img, line_num)
+    mat, icons = to_symbol_list(rects, img, col_num, width, y_begin)
     return mat, icons
 '''
     print(mat)
@@ -101,19 +99,25 @@ def parse_img(img, line_num):
     return mat
 '''
 
-def to_symbol_list(rects, img, line_num):
+def to_symbol_list(rects, img, col_num, width, y_begin):
     color_symbol = {}
     symbol_value = 0
-    symbol_list = []
     icons = {}
+    sw = width / col_num
+
+    mat = np.zeros(shape=(col_num, col_num), dtype=np.int8)
+
     for p in rects:
+        x = int(p.x // sw)
+        y = int((p.y - y_begin) // sw)
+
         img_snipet = img[p.y:p.y+p.h, p.x:p.x+p.w]
         avg_color = avg_value(img_snipet)
         found = False
         for key in color_symbol.keys():
             var = color_var(key, avg_color)
             if var < CONST_STAR_VAR:
-                symbol_list.append(color_symbol[key])
+                mat[y][x] = color_symbol[key]
                 found = True
                 break
         
@@ -121,9 +125,9 @@ def to_symbol_list(rects, img, line_num):
             symbol_value += 1
             color_symbol[avg_color] = symbol_value
             icons[symbol_value] = p
-            symbol_list.append(symbol_value)
-    
-    return np.reshape(symbol_list, (-1, line_num)).tolist(), icons
+            mat[y][x] = symbol_value
+
+    return mat, icons
 
 def color_var(a, b):
     a = np.array(a)
