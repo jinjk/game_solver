@@ -18,7 +18,7 @@ CONST_STAR_VAR = 100
 
 def main():
     """main function"""
-    fd = open('test3.png', 'rb')
+    fd = open('test.png', 'rb')
     data = fd.read()
     fd.close()
     parse_from_data(data, CONST_COL_NUM)
@@ -35,7 +35,7 @@ def filter_rects(width, margin, col_num, rects):
     rects = list(filter(lambda p: 0.6 < p.w / sw < 1 and \
                0.6 < p.h / sw < 1 and 0.85 < p.w / p.h < 1.2, rects))
     edge_rects = filter(lambda p: p.x < margin, rects)
-    edge_rects = sorted(edge_rects, key=lambda p: p.x)
+    edge_rects = sorted(edge_rects, key=lambda p: p.y, reverse=True)
 
     left_bottom_box = edge_rects[0]
 
@@ -84,10 +84,6 @@ def parse_img(img, col_num):
     rects, y_begin = filter_rects(width, margin, col_num, rects)
 
 
-    for p in rects:
-        x,y,w,h = p.x, p.y, p.w, p.h
-        cv2.rectangle(black, (x, y), (x + w, y + h), (0, 200, 0), 1)
-
     mat, icons = to_symbol_list(rects, img, col_num, width, y_begin)
     return mat, icons
 '''
@@ -127,7 +123,7 @@ def to_symbol_list(rects, img, col_num, width, y_begin):
             icons[symbol_value] = p
             mat[y][x] = symbol_value
 
-    return mat, icons
+    return mat.tolist(), icons
 
 def color_var(a, b):
     a = np.array(a)
