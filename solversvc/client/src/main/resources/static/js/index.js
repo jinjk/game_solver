@@ -138,6 +138,10 @@ $(function() {
     function upload_image() {
                             file = $(":file");
                             file_ = file[0];
+                            
+                            if(file_.files.length == 0) {
+                            	return;
+                            }
 
                             if (!file_.name) {
                                 show_message(3001);
@@ -216,6 +220,7 @@ $(function() {
                                         show_message(statusCode);
                                     }).always(function() {
                                         $.mobile.loading("hide");
+                                        $('[name="file"]').val('');
                                     });
     }
 
@@ -227,4 +232,9 @@ $(function() {
                         event.preventDefault(); // Totally stop stuff happening
 
                     });
+    
+    $('[name="file"]').on('change', function(event) {
+    	upload_image();
+    	
+    });
 });

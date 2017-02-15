@@ -55,11 +55,32 @@ public class Solver {
             }
 
             for (int i = 0; i < chars.size(); i++) {
+            	char ch = chars.get(i);
+            	if (ch == '0') {
+            		continue;
+            	}
                 wall.columns.get(i).bricks.add(new Brick(chars.get(i), i, yIndex));
             }
 
+            List<Column> toBeRemoved = new ArrayList<Column>();
+            for(Column c : wall.columns) {
+            	boolean allZero = true;
+            	for(Brick b : c.bricks) {
+            		if(b.ch != '0') {
+            			allZero = false;
+            		}
+            		if(allZero) {
+            			toBeRemoved.add(c);
+            		}
+            	}
+            }
+            for (Column c : toBeRemoved) {
+            	wall.columns.remove(c);
+            }
             yIndex++;
         }
+        
+        
 
         wall.height = yIndex;
 
