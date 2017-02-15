@@ -22,7 +22,7 @@ String.prototype.format = function() {
 $(function() {
 
     // ----------------- init code --------------
-    $(".slider").slick();
+    
     // ----------------- end init ---------------
 
     var imageData = "";
@@ -30,7 +30,16 @@ $(function() {
     function draw_canvases(img, data) {
         var s_width = data.icons["1"].w;
         var grid = init_canvas_grid(img.naturalWidth, s_width);
-
+        var slider =  $(".slider");
+        if(slider.length > 0) {
+            $(".slider").slick("unslick");
+            $("#slider_wrapper").html("")
+        }
+        $("#slider_wrapper").html("<div class='slider' data-slick=" 
+        							+ "'{\"arrows\": true, \"infinite\": false, \"slidesToShow\": 1,"
+        							+ "\"slidesToScroll\": 1}'></div>");
+        $(".slider").slick();
+        
         var len = data.walls.length;
         for (var i = 0; i < len; i++) {
             var index = i;
@@ -39,7 +48,7 @@ $(function() {
             var canvas = $("<canvas id='chart{0}'/>".format(index)); // document.createElement("canvas");
             var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
             block1.children('div').html(canvas);
-            $(".slider").append(block1);
+
             $('.slider').slick('slickAdd', block1);
 
             canvas.attr('width', img.naturalWidth);
@@ -49,6 +58,8 @@ $(function() {
 
             draw_step(step, grid, data.icons, img, ctx);
         }
+        
+        $(".slider").slick("slickGoTo", 0);
 
     }
 
@@ -93,7 +104,7 @@ $(function() {
         var w = des_pos.w;
         var h = des_pos.h;
 
-        if (marked) {
+        if (!marked) {
             ctx.beginPath();
             ctx.lineWidth = margin / 2;
             ctx.setLineDash([ 6, 12 ]);

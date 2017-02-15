@@ -3,9 +3,12 @@
 
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.css">
-<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.css">
-<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/slick-carousel/1.6.0/slick-theme.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//cdn.bootcss.com/slick-carousel/1.6.0/slick-theme.min.css">
 <link rel="stylesheet" type="text/css" href="css/app.css">
 <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
@@ -25,9 +28,9 @@
 
 		<div data-role="main" class="ui-content">
 			<div class="ui-body ui-body-a ui-corner-all">
-				<p>为了能够正确的识别游戏截图，请确保:</p>
-				<p>1. 截图每行只有10个星星</p>
-				<p>2. 是游戏每关的开始，（您还没有动手消灭过任何一个星星）</p>
+				<p>使用方法：</p>
+				<p>1. 在消灭星星游戏中截图（有星星的界面）</p>
+				<p>2. 上传图片</p>
 				<form enctype="multipart/form-data">
 					<span
 						class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
@@ -59,8 +62,8 @@
 		</div>
 
 		<div data-role="main" class="ui-content " id="charts">
-			<div class="slider"
-				data-slick='{"arrows": true, "infinite": false, "slidesToShow": 1, "slidesToScroll": 1}'></div>
+			<div class="ui-body" id="slider_wrapper">
+			</div>
 		</div>
 
 		<div data-role="footer">
