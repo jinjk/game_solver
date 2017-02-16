@@ -3,11 +3,15 @@ var col_number = 10;
 var row_number = 10;
 
 var messages = {
-    "0" : "Cannot connect to server",
+    "0" : "无法连接到服务器",
     "3001" : "请选择图片上传",
-    "3002" : "The file size should be less that 1M",
-    "4001" : "Cannot understand you image",
-    "4002" : "Cannot find all the stars in you image, we need 100 (10 X 10)"
+    "3002" : "文件太大，要小于2M",
+    "4001" : "对不起，没有找到合适的星星",
+    "4002" : "对不起，没有找到合适数目的星星",
+    
+    "6001" : "开始加载",
+    "6002" : "文件上传中...",
+    "6003" : "计算中..."
 }
 
 String.prototype.format = function() {
@@ -137,7 +141,7 @@ $(function() {
             }
             reader.readAsDataURL(file.files[0]);
 
-            $(':mobile-pagecontainer').pagecontainer('change', '#pagetwo');
+            $(':mobile-pagecontainer').pagecontainer('change', '#pagetwo', {transition: "slide"});
         }
     }
 
@@ -168,7 +172,7 @@ $(function() {
                             data.append(file_.name, file_.files[0]);
 
                             $.mobile.loading("show", {
-                                text : "Loading",
+                                text : messages["6001"],
                                 textVisible : true,
                                 theme : "b",
                                 textonly : false,
@@ -194,12 +198,12 @@ $(function() {
                                                                                 .round((e.loaded / e.total) * 100);
                                                                         $(".ui-loader")
                                                                             .children("h1")
-                                                                            .text(percentage + "%");
+                                                                            .text(messages["6002"] + percentage + "%");
 
                                                                         if (percentage == 100) {
                                                                             $(".ui-loader")
                                                                                 .children("h1")
-                                                                                .text("waiting caculation...");
+                                                                                .text(messages["6003"]);
                                                                         }
                                                                     }
                                                                 }, false);
