@@ -1,12 +1,18 @@
 package game.solver;
 
 import game.solver.model.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by C5241628 on 2/16/2017.
@@ -14,10 +20,11 @@ import java.util.stream.Collectors;
 @Component
 public class ActionPicker {
     Logger logger = LoggerFactory.getLogger(ActionPicker.class);
-    public Action pick(Map<Wall, Group> actionsMap, WallWeight oldWeight) {
+
+    public List<Action> pick(Map<Wall, Group> actionsMap, WallWeight oldWeight) {
         List<Wall> walls = new ArrayList<Wall>();
         for(Wall wall : actionsMap.keySet()) {
-            simplifyWall(wall);
+            simplifyWallLoop(wall);
             walls.add(wall);
         }
 
@@ -28,22 +35,55 @@ public class ActionPicker {
             int val = 0; //w1.getMaxGroupSize() - w2.getMaxGroupSize();
 
             if (val == 0) {
-                val = w2.getComplexity() - w1.getComplexity();
+                double v = w2.getComplexity() - w1.getComplexity();
+                if(v > 0) {
+                    val = 1;
+                }
+                else if(v < 0) {
+                    val = -1;
+                }
+                else {
+                    val = 0;
+                }
             }
 
-            if (val == 0) {
-                val = w2.getBricksNum() - w1.getBricksNum();
-            }
             return val * -1;
         });
+        List<Action> actions = new ArrayList<>();
+        double cmpx = walls.get(0).getWeight().getComplexity();
+        for(Wall w : walls) {
+            if(w.getWeight().getComplexity() == cmpx) {
+                Action action = new Action();
+                action.wall = walls.get(0);
+                action.group = actionsMap.get(action.wall);
+                actions.add(action);
+            }
+        }
 
-        Action action = new Action();
-        action.wall = walls.get(0);
-        action.group = actionsMap.get(action.wall);
-        return action;
+        return actions;
     }
 
-    void simplifyWall(Wall image) {
+    void simplifyWallLoop(Wall image) {
+        Wall wall = image;
+        do {
+            wall = simplifyWall(wall);
+        } while(wall.getWeight().getGroups().size() < wall.getWeight().getBricksNum());
+
+        List<Double> colLenList = new ArrayList<>();
+        for(Column c : wall.columns) {
+            colLenList.add((double) c.bricks.size());
+        }
+        double array[] = new double[colLenList.size()];
+        for(int i = 0; i < colLenList.size(); i++) {
+            array[i] = colLenList.get(i);
+        }
+        Statistics st = new Statistics(array);
+
+        image.getWeight().setComplexity(st.getVariance());
+
+    }
+
+    Wall simplifyWall(Wall image) {
         Wall copy = image.copy();
         Wall wall = new Wall();
         wall.width = copy.width;
@@ -80,7 +120,7 @@ public class ActionPicker {
             wall.columns.add(c);
         }
 
-        int complexity = wall.getWeight().getGroups().size() + wall.getWeight().getSingleBricksNum() * 10;
-        image.getWeight().setComplexity(complexity);
+        return wall;
+
     }
 }

@@ -14,7 +14,7 @@ public class WallWeight {
     int singleBricksNum;
     List<Brick> singleBricks = new ArrayList<>();
     int bricksNum;
-    int complexity;
+    double complexity;
 
     public WallWeight() {
     }
@@ -61,11 +61,11 @@ public class WallWeight {
         return "maxGroupSize: " + maxGroupSize + ", singleBricksNum: " + singleBricksNum + ", bricksNum" + bricksNum;
     }
 
-    public int getComplexity() {
+    public double getComplexity() {
         return complexity;
     }
 
-    public void setComplexity(int complexity) {
+    public void setComplexity(double complexity) {
         this.complexity = complexity;
     }
 
