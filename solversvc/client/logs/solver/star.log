@@ -1,0 +1,29 @@
+2017-02-16 13:14:02,771 INFO c.g.ClientApplication [main] Starting ClientApplication on PEKN50900246A with PID 19304 (C:\source\repos\game_solver\solversvc\client\target\classes started by C5241628 in C:\source\repos\game_solver\solversvc\client)
+2017-02-16 13:14:02,780 INFO c.g.ClientApplication [main] No active profile set, falling back to default profiles: default
+2017-02-16 13:14:02,977 INFO o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext [main] Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@70f02c32: startup date [Thu Feb 16 13:14:02 CST 2017]; root of context hierarchy
+2017-02-16 13:14:03,581 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 5.3.4.Final
+2017-02-16 13:14:04,693 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration' of type [class org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-02-16 13:14:04,881 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'validator' of type [class org.springframework.validation.beanvalidation.LocalValidatorFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-02-16 13:14:05,089 ERROR o.s.b.b.PropertiesConfigurationFactory [main] Properties configuration failed validation
+2017-02-16 13:14:05,089 ERROR o.s.b.b.PropertiesConfigurationFactory [main] Field error in object 'server' on field 'tomcat.accesslog.enabled': rejected value [true # Enable access log.]; codes [typeMismatch.server.tomcat.accesslog.enabled,typeMismatch.tomcat.accesslog.enabled,typeMismatch.enabled,typeMismatch.boolean,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [server.tomcat.accesslog.enabled,tomcat.accesslog.enabled]; arguments []; default message [tomcat.accesslog.enabled]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'boolean' for property 'tomcat.accesslog.enabled'; nested exception is org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [boolean]]
+2017-02-16 13:14:05,091 WARN o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext [main] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start embedded container; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'tomcatEmbeddedServletContainerFactory' defined in class path resource [org/springframework/boot/autoconfigure/web/EmbeddedServletContainerAutoConfiguration$EmbeddedTomcat.class]: Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'serverProperties': Could not bind properties to ServerProperties (prefix=server, ignoreInvalidFields=false, ignoreUnknownFields=true, ignoreNestedProperties=false); nested exception is org.springframework.validation.BindException: org.springframework.boot.bind.RelaxedDataBinder$RelaxedBeanPropertyBindingResult: 1 errors
+Field error in object 'server' on field 'tomcat.accesslog.enabled': rejected value [true # Enable access log.]; codes [typeMismatch.server.tomcat.accesslog.enabled,typeMismatch.tomcat.accesslog.enabled,typeMismatch.enabled,typeMismatch.boolean,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [server.tomcat.accesslog.enabled,tomcat.accesslog.enabled]; arguments []; default message [tomcat.accesslog.enabled]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'boolean' for property 'tomcat.accesslog.enabled'; nested exception is org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [boolean]]
+2017-02-16 13:14:05,099 ERROR o.s.b.d.LoggingFailureAnalysisReporter [main] 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Binding to target org.springframework.boot.autoconfigure.web.ServerProperties@7e9da981 failed:
+
+    Property: server.tomcat.accesslog.enabled
+    Value: true # Enable access log.
+    Reason: Failed to convert property value of type 'java.lang.String' to required type 'boolean' for property 'tomcat.accesslog.enabled'; nested exception is org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [boolean]
+
+
+Action:
+
+Update your application's configuration
+

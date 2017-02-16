@@ -16,7 +16,7 @@ except ImportError:
     import httplib as http_client
 http_client.HTTPConnection.debuglevel = 1
 
-logging.basicConfig(filename='/logs/solver/imgsvc.log',level=logging.INFO)
+logging.basicConfig(filename='/var/log/solver/imgsvc.log',level=logging.INFO)
 
 app = Flask(__name__)
 CORS(app)
