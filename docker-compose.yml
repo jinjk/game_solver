@@ -7,6 +7,7 @@ services:
       - "8080:8080"
     volumes:
       - ./imgsvc:/root/imgsvc
+      - /logs/solver:/logs/solver
     command: python /root/imgsvc/imgsvc.py
     depends_on:
       - solversvc
@@ -15,6 +16,7 @@ services:
     build: ./sol_docker
     volumes:
       - ./solversvc/apps:/root/apps
+      - /logs/solver:/logs/solver
     command: java -jar /root/apps/star.jar
   client:
     build: ./sol_docker
@@ -22,5 +24,6 @@ services:
       - "80:8080"
     volumes:
       - ./solversvc/apps:/root/apps
+      - /logs/solver:/logs/solver
     command: java -jar /root/apps/client.jar
 

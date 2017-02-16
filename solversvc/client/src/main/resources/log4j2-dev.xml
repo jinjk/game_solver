@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
 	<Appenders>
-		<RollingFile name="RollingFile" fileName="logs/solver/star.log"
+		<RollingFile name="RollingFile" fileName="logs/app.log"
 			filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
 			<PatternLayout>
 				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
@@ -16,8 +16,9 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="game.solver" level="info" />
-		<Root level="info">
+		<Logger name="game.solver" level="debug" />
+		<Root level="debug">
+			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
 		</Root>
 	</Loggers>
