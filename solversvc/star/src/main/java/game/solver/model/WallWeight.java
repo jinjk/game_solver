@@ -49,4 +49,8 @@ public class WallWeight {
         return signleBricks;
     }
 
+    public String toString() {
+        return "maxGroupSize: " + maxGroupSize + ", signleBricks: " + signleBricks + ", bricksNum" + bricksNum;
+    }
+
 }
