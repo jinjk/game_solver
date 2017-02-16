@@ -1,9 +1,9 @@
 package game.solver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class Wall {
@@ -64,12 +64,13 @@ public class Wall {
 		this.columns = columns;
 	}
 
-	public int getWallWeight() {
+	@JsonIgnore
+	public WallWeight getWeight() {
 	    if(weight == null) {
             weight = new WallWeight();
             weight.calculate(this);
         }
-	    return weight.value();
+	    return weight;
     }
 
     public List<Group> group() {

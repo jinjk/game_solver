@@ -13,7 +13,6 @@ public class Group {
     public int id;
 
     public Set<Brick> bricks = new LinkedHashSet<>();
-    public GroupWeight weight = new GroupWeight();
 
 
     public Fragment getFragment(int x) {
@@ -33,10 +32,6 @@ public class Group {
         } else {
             return f;
         }
-    }
-
-    public int weight() {
-        return weight.signleBricks * Solver.WEIGHT_OF_SINGLE_UNIT + weight.groupSize;
     }
 
     public void mark() {

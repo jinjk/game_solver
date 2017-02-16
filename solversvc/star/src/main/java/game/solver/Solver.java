@@ -3,6 +3,7 @@ package game.solver;
 import game.solver.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,6 +18,9 @@ public class Solver {
     public static final int PREDICTION_LENGTH = 0;
     Logger logger = LoggerFactory.getLogger(Solver.class);
 
+    @Autowired
+    ActionPicker actionPicker;
+
     public List<Wall> execute(List<List<Integer>> mat) {
         Wall wall = readMat(mat);
         return execute(wall);
@@ -26,7 +30,7 @@ public class Solver {
     public List<Wall> execute(Wall wall) {
         List<Wall> result = new ArrayList<Wall>();
 
-        NextStatus status = null;
+        Action status = null;
         do {
             Wall old = wall;
             status = wipeOut(wall, true);
@@ -153,25 +157,18 @@ public class Solver {
             }
         }
 
-        List<Group> newGroups = image.group();
-        g.weight.groupSize = newGroups.size();
-        for (Group ng : newGroups) {
-            if (ng.bricks.size() == 1) {
-                g.weight.signleBricks++;
-            }
-        }
     }
 
-    NextStatus wipeOut(Wall wall, boolean lookForward) {
-        NextStatus actionImage = new NextStatus();
+    Action wipeOut(Wall wall, boolean lookForward) {
+        Action action = new Action();
+
         List<Group> groups = wall.group();
         if (wall == null || groups.size() == wall.getBricks().size()) {
-            actionImage.wall = wall;
-            actionImage.weight = groups.size();
-            return actionImage;
+            action.wall = wall;
+            return action;
         }
 
-        Map<Group, Wall> actionsMap = new HashMap<>();
+        Map<Wall, Group> actionsMap = new HashMap<>();
 
         for (int i = 0; i < groups.size(); ) {
             Group g = groups.get(i);
@@ -182,61 +179,21 @@ public class Solver {
             }
         }
 
+        WallWeight oldWeight = new WallWeight(wall.getWeight());
         for (Group g : groups) {
             Wall image = wall.copy();
 
             wipeOneGroup(image, g);
 
-            actionsMap.put(g, image);
+            actionsMap.put(image, g);
         }
 
-        Collections.sort(groups, (o1, o2) -> o1.weight() - o2.weight());
+        action = actionPicker.pick(actionsMap, oldWeight);
 
-        actionImage.groups = groups;
-        actionImage.actionsMap = actionsMap;
-        actionImage.weight = groups.get(0).weight();
-
-        if (lookForward) {
-            NextStatus fStatus = lookForward(actionImage, PREDICTION_LENGTH);
-            actionImage.group = fStatus.group;
-            actionImage.wall = fStatus.actionsMap.get(actionImage.group);
-        }
-
-        return actionImage;
+        return action;
     }
 
-    NextStatus lookForward(NextStatus nextStatus, int length) {
 
-        if (nextStatus.groups == null) {
-            return nextStatus;
-        }
-
-        int minWeight = -1;
-        Group mg = null;
-        length--;
-        for (Group g : nextStatus.groups) {
-            NextStatus status;
-            if (length >= 0) {
-                status = wipeOut(nextStatus.actionsMap.get(g), false);
-                status = lookForward(status, length);
-            } else {
-                status = nextStatus;
-            }
-
-            if (minWeight == -1) {
-                minWeight = status.weight;
-                mg = g;
-            } else if (minWeight > status.weight) {
-                minWeight = status.weight;
-                mg = g;
-            }
-        }
-
-        nextStatus.weight = minWeight;
-        nextStatus.group = mg;
-
-        return nextStatus;
-    }
 
 
 }
