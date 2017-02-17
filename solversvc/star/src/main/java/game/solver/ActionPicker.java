@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by C5241628 on 2/16/2017.
@@ -28,7 +27,7 @@ public class ActionPicker {
             int val = 0; //w1.getMaxGroupSize() - w2.getMaxGroupSize();
 
             if (val == 0) {
-                val = w2.getComplexity() - w1.getComplexity();
+                val = (int) (w2.getComplexity() - w1.getComplexity());
             }
 
             if (val == 0) {
@@ -44,43 +43,36 @@ public class ActionPicker {
     }
 
     void simplifyWall(Wall image) {
-        Wall copy = image.copy();
-        Wall wall = new Wall();
-        wall.width = copy.width;
-        wall.height = copy.height;
 
-        List<Brick> singleBricks = copy.getWeight().getSingleBricks();
+        List<Brick> singleBricks = image.getWeight().getSingleBricks();
 
-        SortedMap<Integer, Column> columns = new TreeMap<>();
+        Map<Character, List<Brick>> cache = new HashMap<>();
         for(Brick b : singleBricks) {
-            Column c = columns.get(b.getX());
-            if(c == null) {
-                c = new Column();
-                columns.put(b.getX(), c);
-                wall.columns.add(c);
+            List<Brick> list = cache.get(b.ch);
+            if(list == null) {
+                 list = new ArrayList<>();
             }
-            c.bricks.add(b);
+            list.add(b);
         }
 
-        int x = 0;
-        for(Integer key : columns.keySet()) {
-            Column c = columns.get(key);
-            c.bricks.sort((Brick b1, Brick b2) -> {
-                return b1.getY() - b2.getY();
+        long totalDist = 0;
+        for(List<Brick> list : cache.values()) {
+            list.sort((Brick a, Brick b) -> {
+               return a.x - b.x;
             });
 
-            int size = c.bricks.size();
-            Iterator<Brick> iter = c.bricks.iterator();
-            for(int y = copy.getHeight() - size; y < copy.getHeight(); y++) {
-                Brick b = iter.next();
-                b.setY(y);
-                b.setX(x);
+            long dist = 0;
+            for(int i = 0; i < list.size() - 1; i++) {
+                Brick a = list.get(i);
+                Brick b = list.get(i + 1);
+                int xDist = Math.abs(a.x - b.x);
+                int yDist = Math.abs(a.y - b.y);
+                dist += xDist * xDist + yDist;
+
             }
-            x++;
-            wall.columns.add(c);
+            totalDist += dist * dist;
         }
 
-        int complexity = wall.getWeight().getGroups().size() + wall.getWeight().getSingleBricksNum() * 10;
-        image.getWeight().setComplexity(complexity);
+        image.getWeight().setComplexity(totalDist);
     }
 }
