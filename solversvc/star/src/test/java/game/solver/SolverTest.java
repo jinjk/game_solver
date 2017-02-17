@@ -25,9 +25,27 @@ public class SolverTest {
 	@Autowired
 	Solver solver;
 
-	@Test
-	public void testSolve() {
+//	@Test
+	public void testSolveA() {
 		String path = "/a.txt";
+
+		Wall wall = readFile(SolverTest.class.getResourceAsStream(path));
+
+		solver.execute(wall);
+	}
+
+//	@Test
+	public void testSolveB() {
+		String path = "/b.txt";
+
+		Wall wall = readFile(SolverTest.class.getResourceAsStream(path));
+
+		solver.execute(wall);
+	}
+
+	@Test
+	public void testSolveC() {
+		String path = "/c.txt";
 
 		Wall wall = readFile(SolverTest.class.getResourceAsStream(path));
 

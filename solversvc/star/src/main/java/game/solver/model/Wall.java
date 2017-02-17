@@ -95,7 +95,7 @@ public class Wall {
                 }
 
                 if (!added) {
-                    Group g = new Group();
+                    Group g = new Group(this);
                     g.id = i++;
                     g.ch = b.ch;
                     g.bricks.add(b);

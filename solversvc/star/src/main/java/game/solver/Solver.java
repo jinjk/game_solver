@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Component
 public class Solver {
     public static final int WEIGHT_OF_SINGLE_UNIT = 100;
-    public static final int PREDICTION_LENGTH = 0;
-    Logger logger = LoggerFactory.getLogger(Solver.class);
+    public static final int PREDICTION_LENGTH = 2;
+    static Logger logger = LoggerFactory.getLogger(Solver.class);
 
     @Autowired
     ActionPicker actionPicker;
@@ -30,18 +30,35 @@ public class Solver {
     public List<Wall> execute(Wall wall) {
         List<Wall> result = new ArrayList<Wall>();
 
-        Action status = null;
+        Action lastOne = null;
+        Action actionRet;
         do {
-            Wall old = wall;
-            status = wipeOut(wall, true);
-            if (status.group != null)
-                status.group.mark();
+            Node node = new Node();
+            actionRet = wipeOut(wall, PREDICTION_LENGTH, node);
+            while(node != null && (node.getAction() != null || node.getChildren().size() > 0)) {
+                if(node.getAction() != null) {
+                    Action action = node.getAction();
+                    if (action != null) {
+                        action.group.mark();
+                        result.add(action.group.wall);
+                        printWall(action.group.wall);
+                    }
+                }
+                if(node.getChildren().size() > 0)
+                    node = node.getChildren().get(0);
+                else {
+                    lastOne = node.getAction();
+                    node = null;
+                }
+            }
 
-            result.add(old);
-            printWall(old);
-
-            wall = status.wall;
-        } while (status != null && status.group != null);
+            if(actionRet.group != null)
+                wall = lastOne.wall;
+            else {
+                result.add(actionRet.wall);
+                printWall(actionRet.wall);
+            }
+        } while (actionRet.group != null);
 
         return result;
     }
@@ -91,7 +108,7 @@ public class Solver {
         return wall;
     }
 
-    private void printWall(Wall wall) {
+    public static void printWall(Wall wall) {
         if (logger.isDebugEnabled()) {
             Brick[][] block = new Brick[wall.height][wall.width];
             Brick dummy = new Brick(' ', 0, 0);
@@ -159,11 +176,11 @@ public class Solver {
 
     }
 
-    Action wipeOut(Wall wall, boolean lookForward) {
-        Action action = new Action();
-
+    Action wipeOut(Wall wall, int level, Node thisNode) {
         List<Group> groups = wall.group();
+
         if (wall == null || groups.size() == wall.getBricks().size()) {
+            Action action = new Action();
             action.wall = wall;
             return action;
         }
@@ -188,12 +205,42 @@ public class Solver {
             actionsMap.put(image, g);
         }
 
-        action = actionPicker.pick(actionsMap, oldWeight);
+        List<Action> newActions = actionPicker.pick(actionsMap, oldWeight);
 
-        return action;
+        level -= 1;
+        if(newActions.size() == 1 || level < 0) {
+            Node child = new Node();
+            child.setAction(newActions.get(0));
+            thisNode.addChild(child);
+            return newActions.get(0);
+        }
+        else {
+            SortedMap<Long, Action> cache = new TreeMap<>();
+            for(Action action : newActions) {
+                Node child = new Node();
+                child.setAction(action);
+                thisNode.addChild(child);
+
+                Action next = wipeOut(action.wall, level, child);
+                if(next == null) {
+                    continue;
+                }
+                cache.put(next.wall.getWeight().getComplexity(), action);
+            }
+
+            Action bestOne = cache.get(cache.firstKey());
+            Node bestNode = null;
+            for(Node child : thisNode.getChildren()) {
+                if (child.getAction() == bestOne) {
+                    bestNode = child;
+                    break;
+                }
+            }
+
+            thisNode.getChildren().clear();
+            thisNode.addChild(bestNode);
+
+            return cache.get(cache.firstKey());
+        }
     }
-
-
-
-
 }

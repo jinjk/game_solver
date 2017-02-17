@@ -11,9 +11,13 @@ import java.util.Set;
 public class Group {
     public char ch;
     public int id;
+    public Wall wall;
 
     public Set<Brick> bricks = new LinkedHashSet<>();
 
+    public Group(Wall wall) {
+        this.wall = wall;
+    }
 
     public Fragment getFragment(int x) {
         Fragment f = new Fragment();
