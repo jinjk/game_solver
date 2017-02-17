@@ -11,9 +11,9 @@ import java.util.Set;
 public class Group {
     public char ch;
     public int id;
-    public int len;
 
     public Set<Brick> bricks = new LinkedHashSet<>();
+
 
     public Fragment getFragment(int x) {
         Fragment f = new Fragment();

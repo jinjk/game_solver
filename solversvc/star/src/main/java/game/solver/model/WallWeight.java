@@ -1,6 +1,5 @@
 package game.solver.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,34 +8,31 @@ import java.util.List;
  */
 public class WallWeight {
     Group maxGroup;
-    List<Group> groups;
     int maxGroupSize;
-    int singleBricksNum;
-    List<Brick> singleBricks = new ArrayList<>();
+    int signleBricks;
     int bricksNum;
-    double complexity;
 
     public WallWeight() {
     }
 
     public WallWeight(WallWeight weight) {
         this.maxGroupSize = weight.maxGroupSize;
-        this.singleBricksNum = weight.singleBricksNum;
+        this.signleBricks = weight.signleBricks;
     }
 
     public void calculate(Wall wall) {
-        singleBricksNum = 0;
+        signleBricks = 0;
         bricksNum = 0;
 
-    	groups = wall.group();
+    	List<Group> groups = wall.group();
     	Collections.sort(groups, (Group a, Group b) -> b.bricks.size() - a.bricks.size());
         maxGroup = groups.get(0);
         maxGroupSize = maxGroup.bricks.size();
         for (Group ng : groups) {
             bricksNum += ng.bricks.size();
+
             if (ng.bricks.size() == 1) {
-                singleBricks.add(ng.bricks.iterator().next());
-                singleBricksNum++;
+                signleBricks++;
             }
         }
     }
@@ -45,31 +41,16 @@ public class WallWeight {
         return maxGroupSize;
     }
 
-    public int getSingleBricksNum() {
-        return singleBricksNum;
-    }
-
     public int getBricksNum() {
         return bricksNum;
     }
 
-    public List<Brick> getSingleBricks() {
-        return singleBricks;
+    public int getSignleBricks() {
+        return signleBricks;
     }
 
     public String toString() {
-        return "maxGroupSize: " + maxGroupSize + ", singleBricksNum: " + singleBricksNum + ", bricksNum" + bricksNum;
+        return "maxGroupSize: " + maxGroupSize + ", signleBricks: " + signleBricks + ", bricksNum" + bricksNum;
     }
 
-    public double getComplexity() {
-        return complexity;
-    }
-
-    public void setComplexity(double complexity) {
-        this.complexity = complexity;
-    }
-
-    public List<Group> getGroups() {
-        return groups;
-    }
 }

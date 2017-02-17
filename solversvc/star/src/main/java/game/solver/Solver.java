@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Solver {
     public static final int WEIGHT_OF_SINGLE_UNIT = 100;
     public static final int PREDICTION_LENGTH = 0;
-    static Logger logger = LoggerFactory.getLogger(Solver.class);
+    Logger logger = LoggerFactory.getLogger(Solver.class);
 
     @Autowired
     ActionPicker actionPicker;
@@ -33,15 +33,15 @@ public class Solver {
         Action status = null;
         do {
             Wall old = wall;
-            status = wipeOut(wall, PREDICTION_LENGTH);
-            if (status != null && status.group != null)
+            status = wipeOut(wall, true);
+            if (status.group != null)
                 status.group.mark();
 
             result.add(old);
             printWall(old);
-            if(status != null)
-                wall = status.wall;
-        } while (status != null);
+
+            wall = status.wall;
+        } while (status != null && status.group != null);
 
         return result;
     }
@@ -91,7 +91,7 @@ public class Solver {
         return wall;
     }
 
-    public static void printWall(Wall wall) {
+    private void printWall(Wall wall) {
         if (logger.isDebugEnabled()) {
             Brick[][] block = new Brick[wall.height][wall.width];
             Brick dummy = new Brick(' ', 0, 0);
@@ -159,11 +159,13 @@ public class Solver {
 
     }
 
-    Action wipeOut(Wall wall, int level) {
-        List<Group> groups = wall.group();
+    Action wipeOut(Wall wall, boolean lookForward) {
+        Action action = new Action();
 
+        List<Group> groups = wall.group();
         if (wall == null || groups.size() == wall.getBricks().size()) {
-            return null;
+            action.wall = wall;
+            return action;
         }
 
         Map<Wall, Group> actionsMap = new HashMap<>();
@@ -186,21 +188,12 @@ public class Solver {
             actionsMap.put(image, g);
         }
 
-        List<Action> newActions = actionPicker.pick(actionsMap, oldWeight);
+        action = actionPicker.pick(actionsMap, oldWeight);
 
-        level -= 1;
-        if(newActions.size() == 1 || level < 0) {
-            return newActions.get(0);
-        }
-        else {
-            SortedMap<Double, Action> cache = new TreeMap<>();
-            for(Action action : newActions) {
-                Action next = wipeOut(action.wall, level);
-                cache.put(next.wall.getWeight().getComplexity(), action);
-                System.out.print("--" + next.wall.getWeight().getComplexity() + ",");
-            }
-            System.out.println("\n" + cache.firstKey() + ",");
-            return cache.get(cache.firstKey());
-        }
+        return action;
     }
+
+
+
+
 }
