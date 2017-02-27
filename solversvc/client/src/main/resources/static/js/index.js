@@ -26,7 +26,10 @@ String.prototype.format = function() {
 $(function() {
     var imageData = "";
 
+    var lastView = -1;
     function initView(val) {
+    	lastView = val;
+    	
         if(val == 1) {
 	        var slider =  $(".slider");
 	        if(slider.length > 0) {
@@ -306,14 +309,16 @@ $(function() {
 
     }
     
-    
     $('[name="view_selector"]').on('change', function(event) {
     	var value = this.value;
-    	if(value == 1) {
-    		showCarousel();
-    	}
-    	else if(value == 2) {
-    		showList();
+    	if(lastView != value) {
+	    	if(value == 1) {
+	    		showCarousel();
+	    	}
+	    	else if(value == 2) {
+	    		showList();
+	    	}
+	    	lastView = value;
     	}
     })
 });

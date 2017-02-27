@@ -3706,3 +3706,59 @@ Unconditional classes:
 2017-02-27 17:01:19,366 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-4] Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
 2017-02-27 17:01:19,367 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-4] Successfully completed request
 2017-02-27 17:01:19,367 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-4] Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@f9ad8b1
+2017-02-27 17:17:20,484 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-1] Bound request context to thread: org.apache.catalina.connector.RequestFacade@f9ad8b1
+2017-02-27 17:17:20,484 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] DispatcherServlet with name 'dispatcherServlet' processing GET request for [/]
+2017-02-27 17:17:20,485 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-1] Looking up handler method for path /
+2017-02-27 17:17:20,485 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-1] Did not find handler method for [/]
+2017-02-27 17:17:20,485 DEBUG o.s.b.a.w.WebMvcAutoConfiguration$WelcomePageHandlerMapping [http-nio-8080-exec-1] Mapping [/] to HandlerExecutionChain with handler [org.springframework.web.servlet.mvc.ParameterizableViewController@399dfbd7] and 1 interceptor
+2017-02-27 17:17:20,485 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Last-Modified value for [/] is: -1
+2017-02-27 17:17:20,486 DEBUG o.s.w.s.v.ContentNegotiatingViewResolver [http-nio-8080-exec-1] Requested media types are [text/html, application/xhtml+xml, image/webp, application/xml;q=0.9, */*;q=0.8] based on Accept header types and producible media types [*/*])
+2017-02-27 17:17:20,486 DEBUG o.s.w.s.v.BeanNameViewResolver [http-nio-8080-exec-1] No matching bean found for view name 'forward:index.html'
+2017-02-27 17:17:20,486 DEBUG o.s.w.s.v.BeanNameViewResolver [http-nio-8080-exec-1] No matching bean found for view name 'forward:index.html.html'
+2017-02-27 17:17:20,486 DEBUG o.s.w.s.v.ContentNegotiatingViewResolver [http-nio-8080-exec-1] Returning [org.springframework.web.servlet.view.InternalResourceView: unnamed; URL [index.html]] based on requested media type 'text/html'
+2017-02-27 17:17:20,486 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Rendering view [org.springframework.web.servlet.view.InternalResourceView: unnamed; URL [index.html]] in DispatcherServlet with name 'dispatcherServlet'
+2017-02-27 17:17:20,487 DEBUG o.s.w.s.v.InternalResourceView [http-nio-8080-exec-1] Forwarding to resource [index.html] in InternalResourceView 'null'
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] DispatcherServlet with name 'dispatcherServlet' processing GET request for [/index.html]
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-1] Looking up handler method for path /index.html
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-1] Did not find handler method for [/index.html]
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-1] Matching patterns for request [/index.html] are [/**]
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-1] URI Template variables for request [/index.html] are {}
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-1] Mapping [/index.html] to HandlerExecutionChain with handler [ResourceHttpRequestHandler [locations=[ServletContext resource [/], class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@a098d76]]] and 1 interceptor
+2017-02-27 17:17:20,488 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Last-Modified value for [/index.html] is: -1
+2017-02-27 17:17:20,490 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2017-02-27 17:17:20,490 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Successfully completed request
+2017-02-27 17:17:20,490 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-1] Successfully completed request
+2017-02-27 17:17:20,490 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-1] Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@f9ad8b1
+2017-02-27 17:17:20,525 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-6] Bound request context to thread: org.apache.catalina.connector.RequestFacade@67c93b48
+2017-02-27 17:17:20,525 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-6] DispatcherServlet with name 'dispatcherServlet' processing GET request for [/js/index.js]
+2017-02-27 17:17:20,525 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-6] Looking up handler method for path /js/index.js
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-6] Did not find handler method for [/js/index.js]
+2017-02-27 17:17:20,526 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-5] Bound request context to thread: org.apache.catalina.connector.RequestFacade@f9ad8b1
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-6] Matching patterns for request [/js/index.js] are [/**]
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-5] DispatcherServlet with name 'dispatcherServlet' processing GET request for [/css/app.css]
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-5] Looking up handler method for path /css/app.css
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-5] Did not find handler method for [/css/app.css]
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-5] Matching patterns for request [/css/app.css] are [/**]
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-5] URI Template variables for request [/css/app.css] are {}
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-5] Mapping [/css/app.css] to HandlerExecutionChain with handler [ResourceHttpRequestHandler [locations=[ServletContext resource [/], class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@a098d76]]] and 1 interceptor
+2017-02-27 17:17:20,527 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-5] Last-Modified value for [/css/app.css] is: -1
+2017-02-27 17:17:20,526 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-6] URI Template variables for request [/js/index.js] are {}
+2017-02-27 17:17:20,531 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-6] Mapping [/js/index.js] to HandlerExecutionChain with handler [ResourceHttpRequestHandler [locations=[ServletContext resource [/], class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@a098d76]]] and 1 interceptor
+2017-02-27 17:17:20,531 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-6] Last-Modified value for [/js/index.js] is: -1
+2017-02-27 17:17:20,529 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-5] Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2017-02-27 17:17:20,534 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-5] Successfully completed request
+2017-02-27 17:17:20,534 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-5] Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@f9ad8b1
+2017-02-27 17:17:20,538 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-6] Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2017-02-27 17:17:20,538 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-6] Successfully completed request
+2017-02-27 17:17:20,538 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-6] Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@67c93b48
+2017-02-27 17:18:58,809 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-3] Bound request context to thread: org.apache.catalina.connector.RequestFacade@1858ec1b
+2017-02-27 17:18:58,810 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-3] DispatcherServlet with name 'dispatcherServlet' processing GET request for [/js/index.js]
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-3] Looking up handler method for path /js/index.js
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping [http-nio-8080-exec-3] Did not find handler method for [/js/index.js]
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-3] Matching patterns for request [/js/index.js] are [/**]
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-3] URI Template variables for request [/js/index.js] are {}
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping [http-nio-8080-exec-3] Mapping [/js/index.js] to HandlerExecutionChain with handler [ResourceHttpRequestHandler [locations=[ServletContext resource [/], class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@a098d76]]] and 1 interceptor
+2017-02-27 17:18:58,811 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-3] Last-Modified value for [/js/index.js] is: -1
+2017-02-27 17:18:58,817 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-3] Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2017-02-27 17:18:58,817 DEBUG o.s.w.s.DispatcherServlet [http-nio-8080-exec-3] Successfully completed request
+2017-02-27 17:18:58,818 DEBUG o.s.b.w.f.OrderedRequestContextFilter [http-nio-8080-exec-3] Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@1858ec1b
