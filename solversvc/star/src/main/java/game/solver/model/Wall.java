@@ -5,10 +5,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static game.solver.Constants.COL_NUM;
+import static game.solver.Constants.ROW_NUM;
+
 
 public class Wall {
-	public int width;
-	public int height;
+
+    private int width = ROW_NUM;
+	private int height = COL_NUM;
 	private WallWeight weight;
 	private List<Group> groups;
 
@@ -24,8 +28,6 @@ public class Wall {
 
 	public Wall copy() {
 		Wall image = new Wall();
-		image.width = width;
-		image.height = height;
 
 		image.columns = new ArrayList<>();
 		for (Column c : columns) {

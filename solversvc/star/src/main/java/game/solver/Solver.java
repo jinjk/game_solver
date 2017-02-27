@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static game.solver.Constants.PREDICTION_LENGTH;
+
 /**
  * Hello world!
  */
 @Component
 public class Solver {
-    public static final int WEIGHT_OF_SINGLE_UNIT = 100;
-    public static final int PREDICTION_LENGTH = 4;
+
     static Logger logger = LoggerFactory.getLogger(Solver.class);
 
     @Autowired
@@ -68,15 +69,16 @@ public class Solver {
 
     private Wall readMat(List<List<Integer>> input) {
         Wall wall = new Wall();
+        if (wall.getColumns().size() == 0) {
+            for (int i = 0; i < wall.getWidth(); i++) {
+                wall.columns.add(new Column());
+            }
+        }
+
         int yIndex = 0;
         for (List<Integer> line : input) {
             List<Character> chars = line.stream().map(i -> (char) (i + '0')).collect(Collectors.toList());
-            if (wall.width == 0) {
-                wall.width = chars.size();
-                for (int i = 0; i < chars.size(); i++) {
-                    wall.columns.add(new Column());
-                }
-            }
+
 
             for (int i = 0; i < chars.size(); i++) {
             	char ch = chars.get(i);
@@ -103,17 +105,14 @@ public class Solver {
             }
             yIndex++;
         }
-        
-        
 
-        wall.height = yIndex;
 
         return wall;
     }
 
     public static void printWall(Wall wall) {
         if (logger.isDebugEnabled()) {
-            Brick[][] block = new Brick[wall.height][wall.width];
+            Brick[][] block = new Brick[wall.getHeight()][wall.getWidth()];
             Brick dummy = new Brick(' ', 0, 0);
 
             for (Brick[] line : block) {
@@ -151,7 +150,7 @@ public class Solver {
                 continue;
             }
 
-            int offset = c.bricks.size() - image.height;
+            int offset = c.bricks.size() - image.getHeight();
 
             for (int j = f.begin - 1 + offset; j >= 0; j--) {
                 int y =  c.bricks.get(j).getY();

@@ -12,17 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static game.solver.Constants.ROW_NUM;
+
 /**
  * Created by C5241628 on 2/16/2017.
  */
 @Component
 @Scope("prototype")
 public class ActionPicker {
-    public static final int ROW_NUM = 10;
+
 
     Logger logger = LoggerFactory.getLogger(ActionPicker.class);
     double temperature = 1000;
-    double cool = 0.95;
+    double cool = 0.9999;
 
     public List<Action> pick(Map<Wall, Group> actionsMap, WallWeight oldWeight, int iteration) {
         List<Action> actions = new ArrayList<>();
@@ -45,6 +47,7 @@ public class ActionPicker {
                 long delta = wall.getWeight().getComplexity() - cmx;
                 double ram = Math.random();
                 double vet = Math.exp(-1 * delta / temperature);
+//                System.out.println(vet);
                 if(ram > vet)
                     continue;
             }
@@ -67,25 +70,28 @@ public class ActionPicker {
 
         Wall wall = new Wall();
         Column c = null;
-        int ySign = -1;
-        int y = -1;
-        int x = 9;
+        int xSign = -1;
+        int x = -1;
+        int y = 9;
         for(Brick b : singleBricks) {
-            if(b.getY() != ySign) {
+            if(b.getX() != xSign) {
                 c = new Column();
                 wall.getColumns().add(c);
-                x = 9;
-                y++;
+                y = 9;
+                x++;
+                xSign = b.getX();
             }
 
             b.setX(x);
-            b.setX(y);
+            b.setY(y);
             c.bricks.add(b);
-            x--;
+            y--;
         }
 
         int num = wall.getWeight().getSingleBricksNum();
         if(num == singleBricks.size()) {
+//            System.out.println("------------testing---------------");
+//            Solver.printWall(wall);
             image.getWeight().setComplexity(num);
         }
         else {

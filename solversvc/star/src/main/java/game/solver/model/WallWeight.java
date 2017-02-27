@@ -29,14 +29,16 @@ public class WallWeight {
         bricksNum = 0;
 
     	groups = wall.group();
-    	Collections.sort(groups, (Group a, Group b) -> b.bricks.size() - a.bricks.size());
-        maxGroup = groups.get(0);
-        maxGroupSize = maxGroup.bricks.size();
-        for (Group ng : groups) {
-            bricksNum += ng.bricks.size();
-            if (ng.bricks.size() == 1) {
-                singleBricks.add(ng.bricks.iterator().next());
-                singleBricksNum++;
+    	if(groups.size() > 0) {
+            Collections.sort(groups, (Group a, Group b) -> b.bricks.size() - a.bricks.size());
+            maxGroup = groups.get(0);
+            maxGroupSize = maxGroup.bricks.size();
+            for (Group ng : groups) {
+                bricksNum += ng.bricks.size();
+                if (ng.bricks.size() == 1) {
+                    singleBricks.add(ng.bricks.iterator().next());
+                    singleBricksNum++;
+                }
             }
         }
     }

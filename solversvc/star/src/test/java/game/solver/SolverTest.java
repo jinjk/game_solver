@@ -25,7 +25,7 @@ public class SolverTest {
 	@Autowired
 	Solver solver;
 
-//	@Test
+	@Test
 	public void testSolveA() {
 		String path = "/a.txt";
 
@@ -60,8 +60,7 @@ public class SolverTest {
 			int yIndex = 0;
 			while ((line = bufferReader.readLine()) != null) {
 				char[] chars = line.toCharArray();
-				if (wall.width == 0) {
-					wall.width = line.length();
+				if (wall.getColumns().size() == 0) {
 					for (int i = 0; i < line.length(); i++) {
 						wall.columns.add(new Column());
 					}
@@ -73,8 +72,6 @@ public class SolverTest {
 
 				yIndex++;
 			}
-
-			wall.height = yIndex;
 
 			return wall;
 		} catch (Exception ex) {
