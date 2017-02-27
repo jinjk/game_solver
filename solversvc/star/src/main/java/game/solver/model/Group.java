@@ -22,12 +22,12 @@ public class Group {
     public Fragment getFragment(int x) {
         Fragment f = new Fragment();
         for (Brick b : bricks) {
-            if (b.x == x) {
-                if (b.y > f.end) {
-                    f.end = b.y;
+            if (b.getX() == x) {
+                if (b.getY() > f.end) {
+                    f.end = b.getY();
                 }
-                if (b.y < f.begin) {
-                    f.begin = b.y;
+                if (b.getY() < f.begin) {
+                    f.begin = b.getY();
                 }
             }
         }
@@ -39,6 +39,6 @@ public class Group {
     }
 
     public void mark() {
-        bricks.forEach(b -> b.marked = true);
+        bricks.forEach(b -> b.setMarked(true));
     }
 }

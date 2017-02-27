@@ -34,7 +34,7 @@ public class SolverTest {
 		solver.execute(wall);
 	}
 
-//	@Test
+	@Test
 	public void testSolveB() {
 		String path = "/b.txt";
 

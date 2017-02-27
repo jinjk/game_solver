@@ -2,10 +2,10 @@ package game.solver.model;
 
 public class Brick {
 
-	public char ch;
-	public int x;
-	public int y;
-	public boolean marked = false;
+	private char ch;
+	private int x;
+	private int y;
+	private boolean marked = false;
 
 	public Brick(char ch, int x, int y) {
 		this.ch = ch;

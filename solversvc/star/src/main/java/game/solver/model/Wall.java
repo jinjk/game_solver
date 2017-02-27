@@ -85,8 +85,8 @@ public class Wall {
                 boolean added = false;
                 for (Group g : groups) {
                     for (Brick gb : g.bricks) {
-                        if (b.ch == g.ch && (gb.x == b.x || gb.y == b.y)
-                                && (Math.abs(gb.x - b.x) == 1 || Math.abs(gb.y - b.y) == 1)) {
+                        if (b.getCh() == g.ch && (gb.getX() == b.getX() || gb.getY() == b.getY())
+                                && (Math.abs(gb.getX() - b.getX()) == 1 || Math.abs(gb.getY() - b.getY()) == 1)) {
                             g.bricks.add(b);
                             added = true;
                             break;
@@ -97,7 +97,7 @@ public class Wall {
                 if (!added) {
                     Group g = new Group(this);
                     g.id = i++;
-                    g.ch = b.ch;
+                    g.ch = b.getCh();
                     g.bricks.add(b);
                     groups.add(g);
                 }

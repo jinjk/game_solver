@@ -4,6 +4,7 @@ import game.solver.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 @Component
 public class Solver {
     public static final int WEIGHT_OF_SINGLE_UNIT = 100;
-    public static final int PREDICTION_LENGTH = 2;
+    public static final int PREDICTION_LENGTH = 4;
     static Logger logger = LoggerFactory.getLogger(Solver.class);
 
     @Autowired
-    ActionPicker actionPicker;
+    private ApplicationContext appContext;
 
     public List<Wall> execute(List<List<Integer>> mat) {
         Wall wall = readMat(mat);
@@ -29,12 +30,14 @@ public class Solver {
 
     public List<Wall> execute(Wall wall) {
         List<Wall> result = new ArrayList<Wall>();
-
+        ActionPicker actionPicker = appContext.getBean(ActionPicker.class);
         Action lastOne = null;
         Action actionRet;
+        int iteration = 0;
         do {
             Node node = new Node();
-            actionRet = wipeOut(wall, PREDICTION_LENGTH, node);
+            actionRet = wipeOut(wall, actionPicker, PREDICTION_LENGTH, node, iteration++);
+
             while(node != null && (node.getAction() != null || node.getChildren().size() > 0)) {
                 if(node.getAction() != null) {
                     Action action = node.getAction();
@@ -87,7 +90,7 @@ public class Solver {
             for(Column c : wall.columns) {
             	boolean allZero = true;
             	for(Brick b : c.bricks) {
-            		if(b.ch != '0') {
+            		if(b.getCh() != '0') {
             			allZero = false;
             		}
             		if(allZero) {
@@ -119,16 +122,16 @@ public class Solver {
 
             List<Brick> bricks = wall.getBricks();
             for (Brick b : bricks) {
-                block[b.y][b.x] = b; // String.valueOf(b.y).charAt(0);
+                block[b.getY()][b.getX()] = b; // String.valueOf(b.y).charAt(0);
             }
 
             for (Brick[] line : block) {
                 String debugLine = "";
                 for (Brick v : line) {
-                    if (v.marked) {
-                        debugLine += (v.ch + "<\t");
+                    if (v.isMarked()) {
+                        debugLine += (v.getCh() + "<\t");
                     } else {
-                        debugLine += (v.ch + "\t");
+                        debugLine += (v.getCh() + "\t");
                     }
                 }
                 logger.debug(debugLine);
@@ -151,7 +154,8 @@ public class Solver {
             int offset = c.bricks.size() - image.height;
 
             for (int j = f.begin - 1 + offset; j >= 0; j--) {
-                c.bricks.get(j).y += (f.end - f.begin + 1);
+                int y =  c.bricks.get(j).getY();
+                c.bricks.get(j).setY(y += (f.end - f.begin + 1));
             }
             for (int k = f.begin; k <= f.end; k++) {
                 c.bricks.remove(f.begin + offset);
@@ -165,7 +169,8 @@ public class Solver {
                 for (int m = i + 1; m < image.columns.size(); m++) {
                     Column latterColumn = image.columns.get(m);
                     for (Brick b : latterColumn.bricks) {
-                        b.x -= 1;
+                        int x = b.getX();
+                        b.setX(x -= 1);
                     }
                 }
                 image.columns.remove(c);
@@ -176,7 +181,7 @@ public class Solver {
 
     }
 
-    Action wipeOut(Wall wall, int level, Node thisNode) {
+    Action wipeOut(Wall wall, ActionPicker actionPicker, int level, Node thisNode, int iteration) {
         List<Group> groups = wall.group();
 
         if (wall == null || groups.size() == wall.getBricks().size()) {
@@ -205,7 +210,7 @@ public class Solver {
             actionsMap.put(image, g);
         }
 
-        List<Action> newActions = actionPicker.pick(actionsMap, oldWeight);
+        List<Action> newActions = actionPicker.pick(actionsMap, oldWeight, iteration);
 
         level -= 1;
         if(newActions.size() == 1 || level < 0) {
@@ -221,7 +226,7 @@ public class Solver {
                 child.setAction(action);
                 thisNode.addChild(child);
 
-                Action next = wipeOut(action.wall, level, child);
+                Action next = wipeOut(action.wall, actionPicker, level, child, iteration);
                 if(next == null) {
                     continue;
                 }
