@@ -2,77 +2,82 @@
 <html>
 
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css"
-	href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.css">
-<link rel="stylesheet" type="text/css"
-	href="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.css">
-<link rel="stylesheet" type="text/css"
-	href="//cdn.bootcss.com/slick-carousel/1.6.0/slick-theme.min.css">
-<link rel="stylesheet" type="text/css" href="css/app.css">
-<script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
-<script src="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.js"></script>
-<script src="js/index.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css"
+          href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="//cdn.bootcss.com/slick-carousel/1.6.0/slick-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
+    <script src="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.js"></script>
+    <script src="js/index.js"></script>
 </head>
 
 <body>
-	<div data-role="page" id="pageone">
-		<div data-role="header">
-			<a href="#pageone" data-transition="slide" data-direction="reverse"
-				class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
-			<h1>消灭星星帮帮忙</h1>
-			<a href="#pagetwo" data-transition="slide"
-				class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
-		</div>
+<div data-role="page" id="pageone">
+    <div data-role="header">
+        <a href="#pageone" data-transition="slide" data-direction="reverse"
+           class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
+        <h1>消灭星星帮帮忙</h1>
+        <a href="#pagetwo" data-transition="slide"
+           class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
+    </div>
 
-		<div data-role="main" class="ui-content">
-			<div class="ui-body ui-body-a ui-corner-all">
-				<p>使用方法：</p>
-				<p>1. 在消灭星星游戏中截图（有星星的界面）</p>
-				<p>2. 上传图片</p>
-				<form enctype="multipart/form-data">
-					<span
-						class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
-						<span>上传图片</span> <input type="file" name="file" multiple
-						data-role="none" />
-					</span>
-				</form>
-			</div>
-			<div data-role="popup" data-overlay-theme="b" id="message">
-				<a href="#" data-rel="back" data-role="button" data-theme="a"
-					data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-				<p></p>
-				<h1 id="msg_content"></h1>
-			</div>
-		</div>
+    <div data-role="main" class="ui-content">
+        <div class="ui-body ui-body-a ui-corner-all">
+            <p>使用方法：</p>
+            <p>1. 在消灭星星游戏中截图（有星星的界面）</p>
+            <p>2. 上传图片</p>
+            <form enctype="multipart/form-data">
+                    <span
+                            class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
+                        <span>上传图片</span> <input type="file" name="file" multiple
+                                                 data-role="none"/>
+                    </span>
+            </form>
+        </div>
+        <div data-role="popup" data-overlay-theme="b" id="message">
+            <a href="#" data-rel="back" data-role="button" data-theme="a"
+               data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+            <p></p>
+            <h1 id="msg_content"></h1>
+        </div>
+    </div>
 
-		<div data-role="footer">
-			<p style="font-size: 0.6em">v0.1</p>
-		</div>
-	</div>
+    <div data-role="footer">
+        <p style="font-size: 0.6em">v0.1</p>
+    </div>
+</div>
 
-	<div data-role="page" id="pagetwo">
-		<div data-role="header">
-			<a href="#pageone" data-transition="slide" data-direction="reverse"
-				class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
-			<h1>消灭星星帮帮忙</h1>
-			<a href="#pagetwo" data-transition="slide"
-				class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
-		</div>
-
-		<div data-role="main" class="ui-content " id="charts">
-			<div class="ui-body" id="slider_wrapper">
-			</div>
-		</div>
-
-		<div data-role="footer">
-			<p style="font-size: 0.6em">v0.1</p>
-		</div>
-	</div>
-	<div hidden>
-		<img alt="" src="" id="preview" />
-	</div>
+<div data-role="page" id="pagetwo">
+    <div data-role="header">
+        <a href="#pageone" data-transition="slide" data-direction="reverse"
+           class="ui-btn ui-corner-all ui-btn-left ui-shadow" data-icon="home">上传</a>
+        <h1>消灭星星帮帮忙</h1>
+        <a href="#pagetwo" data-transition="slide"
+           class="ui-btn ui-corner-all ui-btn-right ui-shadow" data-icon="grid">查看</a>
+    </div>
+    <div id="myGroup" data-role="fieldcontain"> 
+       <fieldset data-role="controlgroup" data-theme="a" data-type="horizontal">
+           <input type="radio" name="view_selector" id="radio-choice-t-6a" value="1" checked="checked"><label for="radio-choice-t-6a">横向查看</label>
+           <input type="radio" name="view_selector" id="radio-choice-t-6b" value="2"><label for="radio-choice-t-6b">纵向查看</label>
+       </fieldset>
+    </div>
+    <div data-role="main" class="ui-content ">
+        <div class="ui-body" id="slider_wrapper">
+        </div>
+        <div class="ui-grid-solo" id="listView" ></div>
+    </div>
+    <div data-role="footer">
+        <p style="font-size: 0.6em">v0.1</p>
+    </div>
+</div>
+<div hidden>
+    <img alt="" src="" id="preview"/>
+</div>
 </body>
 
 </html>

@@ -24,25 +24,40 @@ String.prototype.format = function() {
 };
 
 $(function() {
-
-    // ----------------- init code --------------
-    
-    // ----------------- end init ---------------
-
     var imageData = "";
 
+    function initView(val) {
+        if(val == 1) {
+	        var slider =  $(".slider");
+	        if(slider.length > 0) {
+	            $(".slider").slick("unslick");
+	            $("#slider_wrapper").html("")
+	        }
+	        $("#slider_wrapper").html("<div class='slider' data-slick=" 
+	        							+ "'{\"arrows\": true, \"infinite\": false, \"slidesToShow\": 1,"
+	        							+ "\"slidesToScroll\": 1}'></div>");
+	        $(".slider").slick();
+        }
+        else if(val == 2) {
+        	$("#listView").html("");
+        }
+    }
+    
+    function updateView(val, block1) {
+        if(val == 1) {
+            $('.slider').slick('slickAdd', block1);
+        }
+        else if(val == 2) {
+            $("#listView").append(block1);
+        }
+    }
+    
     function draw_canvases(img, data) {
         var s_width = data.icons["1"].w;
         var grid = init_canvas_grid(img.naturalWidth, s_width);
-        var slider =  $(".slider");
-        if(slider.length > 0) {
-            $(".slider").slick("unslick");
-            $("#slider_wrapper").html("")
-        }
-        $("#slider_wrapper").html("<div class='slider' data-slick=" 
-        							+ "'{\"arrows\": true, \"infinite\": false, \"slidesToShow\": 1,"
-        							+ "\"slidesToScroll\": 1}'></div>");
-        $(".slider").slick();
+        var selectedView = $('input[name=view_selector]:checked').val();
+        
+        initView(selectedView);
         
         var len = data.walls.length;
         for (var i = 0; i < len; i++) {
@@ -52,9 +67,9 @@ $(function() {
             var canvas = $("<canvas id='chart{0}'/>".format(index)); // document.createElement("canvas");
             var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
             block1.children('div').html(canvas);
-
-            $('.slider').slick('slickAdd', block1);
-
+            
+            updateView(selectedView, block1);
+            
             canvas.attr('width', img.naturalWidth);
             canvas.attr('height', img.naturalWidth);
 
@@ -151,92 +166,92 @@ $(function() {
     }
 
     function upload_image() {
-                            file = $(":file");
-                            file_ = file[0];
-                            
-                            if(file_.files.length == 0) {
-                            	return;
+	    file = $(":file");
+	    file_ = file[0];
+	    
+	    if(file_.files.length == 0) {
+	    	return;
+	    }
+	
+	    if (!file_.name) {
+	        show_message(3001);
+	        return;
+	    }
+	    // Check size is less than 2MB
+	    if (file_.files[0].size > 2 * 1024 * 1024) {
+	        show_message(3002);
+	        return;
+	    }
+	
+	    var data = new FormData();
+	    data.append(file_.name, file_.files[0]);
+	
+	    $.mobile.loading("show", {
+	        text : messages["6001"],
+	        textVisible : true,
+	        theme : "b",
+	        textonly : false,
+	        html : ""
+	    });
+	    $.ajax({
+            url : service_address,
+            type : 'POST',
+            data : data,
+            cache : false,
+            contentType : false,
+            processData : false,
+
+            xhr : function() {
+                var myXhr = $.ajaxSettings
+                        .xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener(
+                        'progress',
+                        function(e) {
+                            if (e.lengthComputable) {
+                                percentage = Math
+                                        .round((e.loaded / e.total) * 100);
+                                $(".ui-loader")
+                                    .children("h1")
+                                    .text(messages["6002"] + percentage + "%");
+
+                                if (percentage == 100) {
+                                    $(".ui-loader")
+                                        .children("h1")
+                                        .text(messages["6003"]);
+                                }
                             }
+                        }, false);
+                }
+                return myXhr;
+            }
+        }).done(function(data) {
+            if (console && console.log) {
+                console.log("Returned value:", data);
+            }
+            show_steps(file_, data);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            statusCode = jqXHR.status;
+            json = jqXHR.responseText;
+            data = {};
 
-                            if (!file_.name) {
-                                show_message(3001);
-                                return;
-                            }
-                            // Check size is less than 2MB
-                            if (file_.files[0].size > 2 * 1024 * 1024) {
-                                show_message(3002);
-                                return;
-                            }
+            if (json) {
+                try {
+                    data = JSON.parse(json);
+                    statusCode = data.code;
+                } catch (err) {
+                    console.log(json);
+                    console.log(err.message);
+                }
 
-                            var data = new FormData();
-                            data.append(file_.name, file_.files[0]);
+            }
 
-                            $.mobile.loading("show", {
-                                text : messages["6001"],
-                                textVisible : true,
-                                theme : "b",
-                                textonly : false,
-                                html : ""
-                            });
-                            $.ajax({
-                                        url : service_address,
-                                        type : 'POST',
-                                        data : data,
-                                        cache : false,
-                                        contentType : false,
-                                        processData : false,
-
-                                        xhr : function() {
-                                            var myXhr = $.ajaxSettings
-                                                    .xhr();
-                                            if (myXhr.upload) {
-                                                myXhr.upload.addEventListener(
-                                                                'progress',
-                                                                function(e) {
-                                                                    if (e.lengthComputable) {
-                                                                        percentage = Math
-                                                                                .round((e.loaded / e.total) * 100);
-                                                                        $(".ui-loader")
-                                                                            .children("h1")
-                                                                            .text(messages["6002"] + percentage + "%");
-
-                                                                        if (percentage == 100) {
-                                                                            $(".ui-loader")
-                                                                                .children("h1")
-                                                                                .text(messages["6003"]);
-                                                                        }
-                                                                    }
-                                                                }, false);
-                                            }
-                                            return myXhr;
-                                        }
-                                    }).done(function(data) {
-                                        if (console && console.log) {
-                                            console.log("Returned value:", data);
-                                        }
-                                        show_steps(file_, data);
-                                    })
-                                    .fail(function(jqXHR, textStatus, errorThrown) {
-                                        statusCode = jqXHR.status;
-                                        json = jqXHR.responseText;
-                                        data = {};
-
-                                        if (json) {
-                                            try {
-                                                data = JSON.parse(json);
-                                                statusCode = data.code;
-                                            } catch (err) {
-                                                console.log(json);
-                                                console.log(err.message);
-                                            }
-
-                                        }
-
-                                        show_message(statusCode);
-                                    }).always(function() {
-                                        $.mobile.loading("hide");
-                                        $('[name="file"]').val('');
-                                    });
+            show_message(statusCode);
+        }).always(function() {
+            $.mobile.loading("hide");
+            $('[name="file"]').val('');
+        });
     }
 
     $('form')
@@ -252,4 +267,53 @@ $(function() {
     	upload_image();
     	
     });
+    
+    function showList() {
+    	$('#slider_wrapper').hide();
+    	$("#listView").html("");
+
+    	
+    	$('#slider_wrapper').find('canvas').each(function(i) {
+            var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
+            block1.children('div').html(this);
+            $("#listView").append(block1);
+    	});
+    	
+    	$("#listView").show();
+    }
+    
+    function showCarousel() {
+    	$("#listView").hide();
+    	$('#slider_wrapper').show();
+    	
+    	var slider =  $(".slider");
+        if(slider.length > 0) {
+            $(".slider").slick("unslick");
+            $("#slider_wrapper").html("")
+        }
+        $("#slider_wrapper").html("<div class='slider' data-slick=" 
+        							+ "'{\"arrows\": true, \"infinite\": false, \"slidesToShow\": 1,"
+        							+ "\"slidesToScroll\": 1}'></div>");
+        $(".slider").slick();
+
+    	$('#listView').find('canvas').each(function(i) {
+            var block1 = $("<div class='ui-block'><div class='ui-bar ui-bar-b'></div></div>");
+            block1.children('div').html(this);
+            
+            $('.slider').slick('slickAdd', block1);
+    	});
+
+
+    }
+    
+    
+    $('[name="view_selector"]').on('change', function(event) {
+    	var value = this.value;
+    	if(value == 1) {
+    		showCarousel();
+    	}
+    	else if(value == 2) {
+    		showList();
+    	}
+    })
 });
