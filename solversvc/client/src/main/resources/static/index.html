@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css"
           href="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.css">
@@ -13,7 +14,7 @@
     <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
     <script src="//cdn.bootcss.com/slick-carousel/1.6.0/slick.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/index-01.js"></script>
 </head>
 
 <body>
@@ -31,6 +32,7 @@
             <p>使用方法：</p>
             <p>1. 在消灭星星游戏中截图（有星星的界面）</p>
             <p>2. 上传图片</p>
+            <p>3. 目前只能处理10X10方阵的游戏</p>
             <form enctype="multipart/form-data">
                     <span
                             class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all fileinput-button">
@@ -62,8 +64,8 @@
     </div>
     <div id="myGroup" data-role="fieldcontain"> 
        <fieldset data-role="controlgroup" data-theme="a" data-type="horizontal">
-           <input type="radio" name="view_selector" id="radio-choice-t-6a" value="1" checked="checked"><label for="radio-choice-t-6a">横向查看</label>
-           <input type="radio" name="view_selector" id="radio-choice-t-6b" value="2"><label for="radio-choice-t-6b">纵向查看</label>
+           <input type="radio" name="view_selector" id="radio-choice-t-6a" value="1"><label for="radio-choice-t-6a">横向查看</label>
+           <input type="radio" name="view_selector" id="radio-choice-t-6b" value="2" checked="checked"><label for="radio-choice-t-6b">纵向查看</label>
        </fieldset>
     </div>
     <div data-role="main" class="ui-content ">
